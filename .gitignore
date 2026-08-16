@@ -1,0 +1,64 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# Test results
+TestResults/
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# ASP.NET Core
+wwwroot/lib/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Docker
+docker-data/
+
+# Local databases
+*.db
+*.db-shm
+*.db-wal
+
+# Coverage
+coverage/
+coverage-report/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper*
+
+# Azure
+.PublishSettings
+
+# User-specific files
+*.rsuser
