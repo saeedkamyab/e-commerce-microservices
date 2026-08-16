@@ -127,4 +127,119 @@ public class ProductTests
         // Assert
         Assert.Empty(product.DomainEvents);
     }
+    [Fact]
+    public void AddSpecification_Should_Add_Specification()
+    {
+        // Arrange
+        var product = CreateProduct();
+
+        var attributeDefinitionId = Guid.NewGuid();
+
+        var specification =
+            ProductSpecification.Create(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(8));
+
+        // Act
+        product.AddSpecification(specification);
+
+        // Assert
+        var result = Assert.Single(
+            product.Specifications);
+
+        Assert.Equal(
+            attributeDefinitionId,
+            result.AttributeDefinitionId);
+
+        Assert.Equal(
+            8,
+            result.Value.Value);
+    }
+    [Fact]
+    public void AddSpecification_Should_Reject_Duplicate_Attribute()
+    {
+        // Arrange
+        var product = CreateProduct();
+
+        var attributeDefinitionId = Guid.NewGuid();
+
+        product.AddSpecification(
+            ProductSpecification.Create(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(8)));
+
+        var duplicate =
+            ProductSpecification.Create(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(12));
+
+        // Act
+        var action = () =>
+            product.AddSpecification(duplicate);
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(action);
+    }
+    [Fact]
+    public void ChangeSpecification_Should_Update_Value()
+    {
+        // Arrange
+        var product = CreateProduct();
+
+        var attributeDefinitionId = Guid.NewGuid();
+
+        product.AddSpecification(
+            ProductSpecification.Create(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(8)));
+
+        // Act
+        product.ChangeSpecification(
+            attributeDefinitionId,
+            ProductSpecificationValue.CreateNumber(12));
+
+        // Assert
+        var specification =
+            Assert.Single(product.Specifications);
+
+        Assert.Equal(
+            12,
+            specification.Value.Value);
+    }
+    [Fact]
+    public void ChangeSpecification_Should_Throw_When_Specification_Does_Not_Exist()
+    {
+        // Arrange
+        var product = CreateProduct();
+
+        var attributeDefinitionId = Guid.NewGuid();
+
+        // Act
+        var action = () =>
+            product.ChangeSpecification(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(12));
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(action);
+    }
+    [Fact]
+    public void RemoveSpecification_Should_Remove_Specification()
+    {
+        // Arrange
+        var product = CreateProduct();
+
+        var attributeDefinitionId = Guid.NewGuid();
+
+        product.AddSpecification(
+            ProductSpecification.Create(
+                attributeDefinitionId,
+                ProductSpecificationValue.CreateNumber(8)));
+
+        // Act
+        product.RemoveSpecification(attributeDefinitionId);
+
+        // Assert
+        Assert.Empty(product.Specifications);
+    }
 }

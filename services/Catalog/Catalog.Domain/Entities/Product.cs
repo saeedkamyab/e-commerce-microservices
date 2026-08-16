@@ -8,8 +8,7 @@ namespace Catalog.Domain.Entities;
 public sealed class Product
 {
     private readonly List<IDomainEvent> _domainEvents = new();
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents;
-
+    private readonly List<ProductSpecification> _specifications = new();
 
     public Guid Id { get; private set; } 
     public ProductName Name { get; private set; } = null!;
@@ -17,6 +16,12 @@ public sealed class Product
     public Guid CategoryId { get; private set; }
     public Price Price { get; private set; } = null!;
     public ProductStatus Status { get; private set; }
+
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents;
+
+    public IReadOnlyCollection<ProductSpecification> Specifications =>
+        _specifications.AsReadOnly();
+
     private Product()
     {
         // For EF Core
@@ -93,6 +98,49 @@ public sealed class Product
             return;
 
         Status = ProductStatus.Inactive;
+    }
+    public void AddSpecification(ProductSpecification specification)
+    {
+        ArgumentNullException.ThrowIfNull(specification);
+
+        if (_specifications.Any(
+            x => x.AttributeDefinitionId ==
+                 specification.AttributeDefinitionId))
+        {
+            throw new InvalidOperationException(
+                "A specification for this attribute already exists.");
+        }
+
+        _specifications.Add(specification);
+    }
+
+    public void ChangeSpecification(
+    Guid attributeDefinitionId,
+    ProductSpecificationValue newValue)
+    {
+        var specification = _specifications
+            .FirstOrDefault(x =>
+                x.AttributeDefinitionId == attributeDefinitionId);
+
+        if (specification is null)
+        {
+            throw new InvalidOperationException(
+                "Specification does not exist.");
+        }
+
+        specification.ChangeValue(newValue);
+    }
+    public void RemoveSpecification(
+    Guid attributeDefinitionId)
+    {
+        var specification = _specifications
+            .FirstOrDefault(x =>
+                x.AttributeDefinitionId == attributeDefinitionId);
+
+        if (specification is null)
+            return;
+
+        _specifications.Remove(specification);
     }
 }
 

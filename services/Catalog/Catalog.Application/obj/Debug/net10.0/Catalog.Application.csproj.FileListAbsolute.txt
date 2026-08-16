@@ -15,3 +15,4 @@ C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.Applicatio
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.Application\obj\Debug\net10.0\Catalog..75771DFE.Up2Date
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.Application\bin\Debug\net10.0\SharedKernel.dll
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.Application\bin\Debug\net10.0\SharedKernel.pdb
+C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.Application\obj\Debug\net10.0\Catalog.Application.sourcelink.json

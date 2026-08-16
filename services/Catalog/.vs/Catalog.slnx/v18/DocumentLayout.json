@@ -1,7 +1,28 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|c:\\users\\saeidkamyab\\source\\repos\\e-commerce\\services\\catalog\\tests\\catalog.unittests\\domain\\entities\\productspecificationtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|solutionrelative:tests\\catalog.unittests\\domain\\entities\\productspecificationtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|c:\\users\\saeidkamyab\\source\\repos\\e-commerce\\services\\catalog\\tests\\catalog.unittests\\domain\\entities\\producttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|solutionrelative:tests\\catalog.unittests\\domain\\entities\\producttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|c:\\users\\saeidkamyab\\source\\repos\\e-commerce\\services\\catalog\\tests\\catalog.unittests\\domain\\valueobjects\\productspecificationvaluetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A75F6754-AF0F-4444-8023-55D1A10ADEEA}|tests\\Catalog.UnitTests\\Catalog.UnitTests.csproj|solutionrelative:tests\\catalog.unittests\\domain\\valueobjects\\productspecificationvaluetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73F8984D-7F45-4513-913C-DEC6B835A0B3}|Catalog.Domain\\Catalog.Domain.csproj|c:\\users\\saeidkamyab\\source\\repos\\e-commerce\\services\\catalog\\catalog.domain\\entities\\productspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73F8984D-7F45-4513-913C-DEC6B835A0B3}|Catalog.Domain\\Catalog.Domain.csproj|solutionrelative:catalog.domain\\entities\\productspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73F8984D-7F45-4513-913C-DEC6B835A0B3}|Catalog.Domain\\Catalog.Domain.csproj|c:\\users\\saeidkamyab\\source\\repos\\e-commerce\\services\\catalog\\catalog.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73F8984D-7F45-4513-913C-DEC6B835A0B3}|Catalog.Domain\\Catalog.Domain.csproj|solutionrelative:catalog.domain\\entities\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +30,40 @@
       "DocumentGroups": [
         {
           "DockedWidth": 217,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductTests.cs",
+              "DocumentMoniker": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\Entities\\ProductTests.cs",
+              "RelativeDocumentMoniker": "tests\\Catalog.UnitTests\\Domain\\Entities\\ProductTests.cs",
+              "ToolTip": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\Entities\\ProductTests.cs",
+              "RelativeToolTip": "tests\\Catalog.UnitTests\\Domain\\Entities\\ProductTests.cs",
+              "ViewState": "AgIAAN8AAAAAAAAAAAAUwIgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T10:49:30.584Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProductSpecificationValueTests.cs",
+              "DocumentMoniker": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\ValueObjects\\ProductSpecificationValueTests.cs",
+              "RelativeDocumentMoniker": "tests\\Catalog.UnitTests\\Domain\\ValueObjects\\ProductSpecificationValueTests.cs",
+              "ToolTip": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\ValueObjects\\ProductSpecificationValueTests.cs",
+              "RelativeToolTip": "tests\\Catalog.UnitTests\\Domain\\ValueObjects\\ProductSpecificationValueTests.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAuwGIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T12:19:00.778Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -21,11 +74,67 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProductSpecification.cs",
+              "DocumentMoniker": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\Catalog.Domain\\Entities\\ProductSpecification.cs",
+              "RelativeDocumentMoniker": "Catalog.Domain\\Entities\\ProductSpecification.cs",
+              "ToolTip": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\Catalog.Domain\\Entities\\ProductSpecification.cs",
+              "RelativeToolTip": "Catalog.Domain\\Entities\\ProductSpecification.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAmwAoAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T10:01:03.812Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Product.cs",
+              "DocumentMoniker": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\Catalog.Domain\\Entities\\Product.cs",
+              "RelativeDocumentMoniker": "Catalog.Domain\\Entities\\Product.cs",
+              "ToolTip": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\Catalog.Domain\\Entities\\Product.cs",
+              "RelativeToolTip": "Catalog.Domain\\Entities\\Product.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAwwI8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T10:02:03.192Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "cf9dc1ae-8100-41d0-bb32-77871759b1d1",
+        "Display": 1,
+        "X": 93,
+        "Y": 153,
+        "Width": 1165,
+        "Height": 541,
+        "WindowState": 2
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductSpecificationTest.cs",
+              "DocumentMoniker": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\Entities\\ProductSpecificationTest.cs",
+              "RelativeDocumentMoniker": "tests\\Catalog.UnitTests\\Domain\\Entities\\ProductSpecificationTest.cs",
+              "ToolTip": "C:\\Users\\SaeidKamyab\\source\\repos\\E-Commerce\\services\\Catalog\\tests\\Catalog.UnitTests\\Domain\\Entities\\ProductSpecificationTest.cs",
+              "RelativeToolTip": "tests\\Catalog.UnitTests\\Domain\\Entities\\ProductSpecificationTest.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAA6wCUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T12:31:45.653Z",
+              "EditorCaption": ""
             }
           ]
         }

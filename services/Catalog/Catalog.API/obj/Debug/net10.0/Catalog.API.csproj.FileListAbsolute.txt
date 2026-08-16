@@ -39,3 +39,4 @@ C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.API\obj\De
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.API\obj\Debug\net10.0\Catalog..F07FDCDC.Up2Date
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.API\bin\Debug\net10.0\SharedKernel.dll
 C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.API\bin\Debug\net10.0\SharedKernel.pdb
+C:\Users\SaeidKamyab\source\repos\E-Commerce\services\Catalog\Catalog.API\obj\Debug\net10.0\Catalog.API.sourcelink.json
