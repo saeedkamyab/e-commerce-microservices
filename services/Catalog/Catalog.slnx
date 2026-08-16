@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Catalog.API/Catalog.API.csproj" Id="19ae36c4-d0b5-45aa-a76d-ded469e4f5b3" />
+    <Project Path="Catalog.Application/Catalog.Application.csproj" Id="c549827c-e909-421b-b98d-c64b966723c1" />
+    <Project Path="Catalog.Contracts/Catalog.Contracts.csproj" Id="e03c497b-a091-49ef-9f8c-8eecc2117244" />
+    <Project Path="Catalog.Domain/Catalog.Domain.csproj" Id="73f8984d-7f45-4513-913c-dec6b835a0b3" />
+    <Project Path="Catalog.Infrastructure/Catalog.Infrastructure.csproj" Id="8967fdd2-e44a-45f4-b037-8f5bd9fadab1" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Catalog.ArchitectureTests/Catalog.ArchitectureTests.csproj" Id="1dbc0d6c-d730-4cb1-9374-13067c9f2656" />
+    <Project Path="tests/Catalog.IntegrationTests/Catalog.IntegrationTests.csproj" Id="fbdcb415-67bb-4e5d-aa49-81a9a4b6ae1e" />
+    <Project Path="tests/Catalog.UnitTests/Catalog.UnitTests.csproj" Id="a75f6754-af0f-4444-8023-55d1a10adeea" />
+  </Folder>
+</Solution>

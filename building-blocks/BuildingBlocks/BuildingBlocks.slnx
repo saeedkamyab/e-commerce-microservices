@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/SharedKernel/">
+    <Project Path="SharedKernel/SharedKernel.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,11 @@
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.deps.json
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.dll
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.pdb
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.AssemblyInfoInputs.cache
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.AssemblyInfo.cs
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.csproj.CoreCompileInputs.cache
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.dll
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\refint\SharedKernel.dll
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\SharedKernel.pdb
+C:\Users\SaeidKamyab\source\repos\E-Commerce\building-blocks\BuildingBlocks\SharedKernel\obj\Debug\net10.0\ref\SharedKernel.dll
