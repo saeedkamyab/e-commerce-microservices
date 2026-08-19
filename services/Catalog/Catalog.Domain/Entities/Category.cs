@@ -10,11 +10,11 @@ public sealed class Category
 
     public Guid Id { get; private set; }
 
-        public CategoryName Name { get; private set; } = null!;
+    public CategoryName Name { get; private set; } = null!;
 
-        public Guid? ParentCategoryId { get; private set; }
+    public Guid? ParentCategoryId { get; private set; }
 
-        public CategoryStatus Status { get; private set; }
+    public CategoryStatus Status { get; private set; }
 
 
     public IReadOnlyCollection<CategoryAttributeDefinition>
@@ -22,61 +22,61 @@ public sealed class Category
         _attributeDefinitions.AsReadOnly();
 
     private Category()
-        {
-            // For EF Core
-        }
+    {
+        // For EF Core
+    }
 
-        private Category(
-            Guid id,
-            CategoryName name,
-            Guid? parentCategoryId)
-        {
-            Id = id;
-            Name = name;
-            ParentCategoryId = parentCategoryId;
-            Status = CategoryStatus.Active;
-        }
+    private Category(
+        Guid id,
+        CategoryName name,
+        Guid? parentCategoryId)
+    {
+        Id = id;
+        Name = name;
+        ParentCategoryId = parentCategoryId;
+        Status = CategoryStatus.Active;
+    }
 
-        public static Category Create(
-            CategoryName name,
-            Guid? parentCategoryId = null)
-        {
-            ArgumentNullException.ThrowIfNull(name);
+    public static Category Create(
+        CategoryName name,
+        Guid? parentCategoryId = null)
+    {
+        ArgumentNullException.ThrowIfNull(name);
 
-            if (parentCategoryId == Guid.Empty)
-                parentCategoryId = null;
+        if (parentCategoryId == Guid.Empty)
+            parentCategoryId = null;
 
-            return new Category(
-                Guid.NewGuid(),
-                name,
-                parentCategoryId);
-        }
+        return new Category(
+            Guid.NewGuid(),
+            name,
+            parentCategoryId);
+    }
 
-        public void Rename(CategoryName newName)
-        {
-            ArgumentNullException.ThrowIfNull(newName);
+    public void Rename(CategoryName newName)
+    {
+        ArgumentNullException.ThrowIfNull(newName);
 
-            if (Name == newName)
-                return;
+        if (Name == newName)
+            return;
 
-            Name = newName;
-        }
+        Name = newName;
+    }
 
-        public void Activate()
-        {
-            if (Status == CategoryStatus.Active)
-                return;
+    public void Activate()
+    {
+        if (Status == CategoryStatus.Active)
+            return;
 
-            Status = CategoryStatus.Active;
-        }
+        Status = CategoryStatus.Active;
+    }
 
-        public void Deactivate()
-        {
-            if (Status == CategoryStatus.Inactive)
-                return;
+    public void Deactivate()
+    {
+        if (Status == CategoryStatus.Inactive)
+            return;
 
-            Status = CategoryStatus.Inactive;
-        }
+        Status = CategoryStatus.Inactive;
+    }
 
     public void AddAttributeDefinition(
     CategoryAttributeDefinition definition)
