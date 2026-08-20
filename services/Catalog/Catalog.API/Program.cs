@@ -1,3 +1,4 @@
+using Catalog.API.Endpoints.Categories;
 using Catalog.API.Endpoints.Products;
 using Catalog.Application;
 using Catalog.Infrastructure;
@@ -22,6 +23,8 @@ app.UseAuthorization();
 
 //app.MapControllers();
 
+app.MapCreateCategoryEndpoint();
+app.MapGetCategoryByIdEndpoint();
 app.MapCreateProductEndpoint();
 
 
