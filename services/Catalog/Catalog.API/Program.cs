@@ -1,8 +1,16 @@
+using Catalog.API.Endpoints.Products;
+using Catalog.Application;
+using Catalog.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -12,6 +20,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
+
+app.MapCreateProductEndpoint();
+
 
 app.Run();

@@ -32,6 +32,20 @@ public sealed class CategoryAttributeDefinition
         Type = type;
         IsRequired = isRequired;
     }
+
+    public static CategoryAttributeDefinition Rehydrate(
+    Guid id,
+    string name,
+    AttributeType type,
+    bool isRequired)
+    {
+        return new CategoryAttributeDefinition(
+            id,
+            name,
+            type,
+            isRequired);
+    }
+
     public static CategoryAttributeDefinition Create(
       string name,
       AttributeType type,

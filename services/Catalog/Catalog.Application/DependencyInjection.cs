@@ -1,5 +1,16 @@
-﻿namespace Catalog.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class DependencyInjection
+namespace Catalog.Application;
+
+public static class DependencyInjection
 {
+    public static IServiceCollection AddApplication(
+        this IServiceCollection services)
+    {
+        services.AddMediatR(config =>
+            config.RegisterServicesFromAssembly(
+                typeof(DependencyInjection).Assembly));
+
+        return services;
+    }
 }

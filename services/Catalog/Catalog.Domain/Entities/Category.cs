@@ -36,7 +36,17 @@ public sealed class Category
         ParentCategoryId = parentCategoryId;
         Status = CategoryStatus.Active;
     }
-
+    public static Category Rehydrate(
+    Guid id,
+    CategoryName name,
+    Guid? parentCategoryId)
+    {
+        return new Category(
+            id,
+            name,
+            parentCategoryId
+            );
+    }
     public static Category Create(
         CategoryName name,
         Guid? parentCategoryId = null)

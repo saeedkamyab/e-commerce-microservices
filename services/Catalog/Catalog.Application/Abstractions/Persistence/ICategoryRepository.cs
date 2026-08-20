@@ -8,5 +8,8 @@ public interface ICategoryRepository
         Guid id,
         CancellationToken cancellationToken);
 
-  
+    Task AddAsync(
+      Category category,
+      CancellationToken cancellationToken);
+
 }

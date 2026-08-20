@@ -19,6 +19,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -28,7 +29,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
             "iPhone 17",
@@ -54,6 +56,11 @@ public class CreateProductTests
                     p.Name == ProductName.Create("iPhone 17")),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Once);
     }
     [Fact]
     public async Task Handle_Should_Throw_When_Category_Does_Not_Exist()
@@ -63,6 +70,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -72,7 +80,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
             "iPhone 17",
@@ -95,6 +104,12 @@ public class CreateProductTests
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
     [Fact]
     public async Task Handle_Should_Throw_When_Attribute_Does_Not_Belong_To_Category()
@@ -105,6 +120,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -114,7 +130,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
            "iPhone 17",
@@ -141,6 +158,11 @@ public class CreateProductTests
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
     [Fact]
     public async Task Handle_Should_Throw_When_Required_Attribute_Is_Missing()
@@ -159,6 +181,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -168,7 +191,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
               "iPhone 17",
@@ -191,6 +215,11 @@ public class CreateProductTests
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
     [Fact]
     public async Task Handle_Should_Create_Product_When_Required_Attributes_Are_Provided()
@@ -209,6 +238,8 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
+
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -218,7 +249,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
             "iPhone 17",
@@ -246,6 +278,11 @@ public class CreateProductTests
                     p.Specifications.Count == 1),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Once);
     }
 
     [Fact]
@@ -265,6 +302,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -274,7 +312,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
             "iPhone 17",
@@ -301,6 +340,12 @@ public class CreateProductTests
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
     [Theory]
     [InlineData("true")]
@@ -322,6 +367,7 @@ public class CreateProductTests
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -331,7 +377,8 @@ public class CreateProductTests
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
                     "iPhone 17",
@@ -352,6 +399,11 @@ category.Id,
 
         // Assert
         Assert.NotEqual(Guid.Empty, result);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Once);
     }
     [Fact]
     public async Task Handle_Should_Throw_When_Boolean_Attribute_Has_Invalid_Value()
@@ -370,6 +422,7 @@ category.Id,
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -379,7 +432,8 @@ category.Id,
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
                     "iPhone 17",
@@ -406,6 +460,11 @@ category.Id,
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
 
     [Fact]
@@ -431,6 +490,7 @@ category.Id,
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -440,7 +500,8 @@ category.Id,
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
                    "iPhone 17",
@@ -468,6 +529,11 @@ category.Id,
                     p.Specifications.Count == 1),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Once);
     }
     [Fact]
     public async Task Handle_Should_Throw_When_Option_Value_Is_Not_Allowed()
@@ -492,6 +558,7 @@ category.Id,
 
         var categoryRepository = new Mock<ICategoryRepository>();
         var productRepository = new Mock<IProductRepository>();
+        var unitOfWork = new Mock<IUnitOfWork>();
 
         categoryRepository
             .Setup(x => x.GetByIdAsync(
@@ -501,7 +568,8 @@ category.Id,
 
         var handler = new CreateProductCommandHandler(
             categoryRepository.Object,
-            productRepository.Object);
+            productRepository.Object,
+            unitOfWork.Object);
 
         var command = new CreateProductCommand(
                            "iPhone 17",
@@ -528,5 +596,10 @@ category.Id,
                 It.IsAny<Product>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+
+        unitOfWork.Verify(
+    x => x.SaveChangesAsync(
+        It.IsAny<CancellationToken>()),
+    Times.Never);
     }
 }

@@ -1,0 +1,19 @@
+services:
+
+  catalog-db:
+    image: postgres:17
+    container_name: ecommerce-catalog-db
+
+    environment:
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - catalog_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  catalog_postgres_data:
