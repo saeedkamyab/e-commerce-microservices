@@ -1,5 +1,7 @@
 ﻿using Catalog.Application.Abstractions.Persistence;
+using Catalog.Application.Abstractions.Persistence.Queries;
 using Catalog.Infrastructure.Persistence;
+using Catalog.Infrastructure.Persistence.Queries;
 using Catalog.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +24,7 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString));
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductReadService, ProductReadService>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddScoped<IUnitOfWork>(sp =>

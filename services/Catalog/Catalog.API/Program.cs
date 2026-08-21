@@ -23,9 +23,12 @@ app.UseAuthorization();
 
 //app.MapControllers();
 
+//Category
 app.MapCreateCategoryEndpoint();
 app.MapGetCategoryByIdEndpoint();
-app.MapCreateProductEndpoint();
 
+//Product
+app.MapCreateProductEndpoint();
+app.MapGetProductByIdEndpoint();
 
 app.Run();
