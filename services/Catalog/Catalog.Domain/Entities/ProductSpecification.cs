@@ -48,4 +48,27 @@ public sealed class ProductSpecification
 
         Value = value;
     }
+
+    public static ProductSpecification Rehydrate(
+    Guid id,
+    Guid attributeDefinitionId,
+    ProductSpecificationValue value)
+    {
+        if (id == Guid.Empty)
+            throw new ArgumentException(
+                "Specification id cannot be empty.",
+                nameof(id));
+
+        if (attributeDefinitionId == Guid.Empty)
+            throw new ArgumentException(
+                "Attribute definition id cannot be empty.",
+                nameof(attributeDefinitionId));
+
+        ArgumentNullException.ThrowIfNull(value);
+
+        return new ProductSpecification(
+            id,
+            attributeDefinitionId,
+            value);
+    }
 }

@@ -1,8 +1,9 @@
-﻿using Catalog.Domain.Enums;
+﻿using Catalog.Application.Abstractions.Persistence;
 using Catalog.Domain.Entities;
+using Catalog.Domain.Enums;
 using Catalog.Domain.ValueObjects;
 using Catalog.Infrastructure.Persistence.Models;
-using Catalog.Application.Abstractions.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Persistence.Repositories;
 
@@ -13,6 +14,40 @@ internal sealed class ProductRepository : IProductRepository
     public ProductRepository(CatalogDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<Product?> GetByIdAsync(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var product = await _dbContext.Products
+            .FirstOrDefaultAsync(
+                x => x.Id == id,
+                cancellationToken);
+
+        if (product is null)
+            return null;
+
+        var specificationRecords =
+            await _dbContext.ProductSpecifications
+                .AsNoTracking()
+                .Where(x => x.ProductId == id)
+                .ToListAsync(cancellationToken);
+
+        foreach (var record in specificationRecords)
+        {
+            var value = MapSpecificationValue(record);
+
+            var specification =
+                ProductSpecification.Rehydrate(
+                    record.Id,
+                    record.AttributeDefinitionId,
+                    value);
+
+            product.AddSpecification(specification);
+        }
+
+        return product;
     }
 
     public async Task AddAsync(
@@ -88,4 +123,49 @@ internal sealed class ProductRepository : IProductRepository
 
         return record;
     }
+
+    private static ProductSpecificationValue MapSpecificationValue(
+    ProductSpecificationRecord record)
+    {
+        if (record.TextValue is not null)
+        {
+            return ProductSpecificationValue.CreateText(
+                record.TextValue);
+        }
+
+        if (record.NumberValue.HasValue)
+        {
+            return ProductSpecificationValue.CreateNumber(
+                record.NumberValue.Value);
+        }
+
+        if (record.DecimalValue.HasValue)
+        {
+            return ProductSpecificationValue.CreateDecimal(
+                record.DecimalValue.Value);
+        }
+
+        if (record.BooleanValue.HasValue)
+        {
+            return ProductSpecificationValue.CreateBoolean(
+                record.BooleanValue.Value);
+        }
+
+        if (record.DateValue.HasValue)
+        {
+            return ProductSpecificationValue.CreateDate(
+                record.DateValue.Value);
+        }
+
+        if (record.OptionValue is not null)
+        {
+            return ProductSpecificationValue.CreateOption(
+                AttributeOption.Create(record.OptionValue));
+        }
+
+        throw new InvalidOperationException(
+            $"Specification '{record.Id}' does not contain a value.");
+    }
+
+
 }

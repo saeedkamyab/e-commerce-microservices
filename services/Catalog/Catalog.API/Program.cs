@@ -30,5 +30,7 @@ app.MapGetCategoryByIdEndpoint();
 //Product
 app.MapCreateProductEndpoint();
 app.MapGetProductByIdEndpoint();
+app.MapActivateProductEndpoint();
+
 
 app.Run();
