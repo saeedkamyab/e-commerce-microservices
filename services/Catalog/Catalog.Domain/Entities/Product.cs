@@ -75,6 +75,7 @@ public sealed class Product
                 Id,
                 oldPrice.Amount,
                 newPrice.Amount,
+                newPrice.Currency,
                 DateTime.UtcNow));
     }
     public void Activate()
@@ -141,6 +142,11 @@ public sealed class Product
             return;
 
         _specifications.Remove(specification);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
 

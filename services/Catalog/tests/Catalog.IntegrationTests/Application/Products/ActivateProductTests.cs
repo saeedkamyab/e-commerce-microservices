@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Catalog.IntegrationTests.Application.Products;
 
 [Collection(CatalogDatabaseCollection.Name)]
-public class ActivateProductTests
+public sealed class ActivateProductTests
 {
     private readonly CatalogDatabaseFixture _fixture;
 

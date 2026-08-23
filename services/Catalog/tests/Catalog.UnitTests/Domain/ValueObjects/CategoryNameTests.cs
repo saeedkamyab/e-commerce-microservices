@@ -29,6 +29,7 @@ public class CategoryNameTests
     {
         // Act
         var action = () => CategoryName.Create("");
+      
 
         // Assert
         Assert.Throws<ArgumentException>(action);

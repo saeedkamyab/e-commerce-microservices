@@ -1,0 +1,133 @@
+﻿using Catalog.Application.Abstractions.Messaging;
+using Catalog.Infrastructure.Persistence.Models;
+using Catalog.Infrastructure.Persistence.Outbox;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+
+namespace Catalog.IntegrationTests.Infrastructure.Outbox;
+
+[Collection(CatalogDatabaseCollection.Name)]
+public sealed class OutboxProcessorTests
+{
+    private readonly CatalogDatabaseFixture _fixture;
+
+    public OutboxProcessorTests(
+        CatalogDatabaseFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
+    [Fact]
+    public async Task ProcessAsync_Should_Publish_And_Mark_Message_As_Processed()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        var message = new OutboxMessage
+        {
+            Id = Guid.NewGuid(),
+            Type = "TestIntegrationEvent",
+            Content = """{"value":"test"}""",
+            OccurredOnUtc = DateTime.UtcNow
+        };
+
+        dbContext.OutboxMessages.Add(message);
+
+        await dbContext.SaveChangesAsync();
+
+        var publisher =
+            new Mock<IIntegrationEventPublisher>();
+
+        var processor = new OutboxProcessor(
+            dbContext,
+            publisher.Object);
+
+        // Act
+        await processor.ProcessAsync(
+            CancellationToken.None);
+
+        // Assert
+        publisher.Verify(
+            x => x.PublishAsync(
+                message.Id,
+                message.Type,
+                message.Content,
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+
+        await using var assertionDbContext =
+            _fixture.CreateDbContext();
+
+        var persistedMessage =
+            await assertionDbContext.OutboxMessages
+                .AsNoTracking()
+                .SingleAsync(x => x.Id == message.Id);
+
+        Assert.NotNull(
+            persistedMessage.ProcessedOnUtc);
+
+        Assert.Null(
+            persistedMessage.Error);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_Should_Store_Error_When_Publisher_Fails()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        var message = new OutboxMessage
+        {
+            Id = Guid.NewGuid(),
+            Type = "TestIntegrationEvent",
+            Content = """{"value":"test"}""",
+            OccurredOnUtc = DateTime.UtcNow
+        };
+
+        dbContext.OutboxMessages.Add(message);
+
+        await dbContext.SaveChangesAsync();
+
+        var publisher =
+            new Mock<IIntegrationEventPublisher>();
+
+        publisher
+            .Setup(x => x.PublishAsync(
+                message.Id,
+                message.Type,
+                message.Content,
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(
+                new InvalidOperationException("RabbitMQ unavailable"));
+
+        var processor =
+            new OutboxProcessor(
+                dbContext,
+                publisher.Object);
+
+        // Act
+        await processor.ProcessAsync(
+            CancellationToken.None);
+
+        // Assert
+        await using var assertionDbContext =
+            _fixture.CreateDbContext();
+
+        var persistedMessage =
+            await assertionDbContext.OutboxMessages
+                .AsNoTracking()
+                .SingleAsync(x => x.Id == message.Id);
+
+        Assert.Null(
+            persistedMessage.ProcessedOnUtc);
+
+        Assert.NotNull(
+            persistedMessage.Error);
+
+        Assert.Contains(
+            "RabbitMQ unavailable",
+            persistedMessage.Error);
+    }
+}

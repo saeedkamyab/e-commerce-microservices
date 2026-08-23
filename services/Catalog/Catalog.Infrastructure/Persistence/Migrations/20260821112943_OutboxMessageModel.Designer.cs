@@ -3,6 +3,7 @@ using System;
 using Catalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Catalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    partial class CatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260821112943_OutboxMessageModel")]
+    partial class OutboxMessageModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,35 +132,6 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("category_attribute_definitions", (string)null);
-                });
-
-            modelBuilder.Entity("Catalog.Infrastructure.Persistence.Models.InboxMessage", b =>
-                {
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("message_id");
-
-                    b.Property<string>("Error")
-                        .HasColumnType("text")
-                        .HasColumnName("error");
-
-                    b.Property<DateTime?>("ProcessedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("processed_on_utc");
-
-                    b.Property<DateTime>("ReceivedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("received_on_utc");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("type");
-
-                    b.HasKey("MessageId");
-
-                    b.ToTable("inbox_messages", (string)null);
                 });
 
             modelBuilder.Entity("Catalog.Infrastructure.Persistence.Models.OutboxMessage", b =>
