@@ -1,1 +1,14 @@
-<Solution />
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Inventory.API/Inventory.API.csproj" Id="65f3e81e-2bf5-47c9-89bc-2fcee56bd806" />
+    <Project Path="Inventory.Application/Inventory.Application.csproj" Id="db6034da-a096-46ba-9dfa-05cd12644b65" />
+    <Project Path="Inventory.Contracts/Inventory.Contracts.csproj" Id="604600dc-0e84-4135-a37d-e1d562555adc" />
+    <Project Path="Inventory.Domain/Inventory.Domain.csproj" Id="dea9521f-7233-47ec-96dd-856aab5e4ac9" />
+    <Project Path="Inventory.Infrastructure/Inventory.Infrastructure.csproj" Id="4c58b190-de87-4878-b4de-d041d75fbd93" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Inventory.ArchitectureTests/Inventory.ArchitectureTests.csproj" Id="093b31ff-71bb-4b8c-8396-da78b2fd32d7" />
+    <Project Path="tests/Inventory.IntegrationTests/Inventory.IntegrationTests.csproj" Id="acc71d9a-98cd-496f-91eb-de2488f4e3cb" />
+    <Project Path="tests/Inventory.UnitTests/Inventory.UnitTests.csproj" Id="d1a0e626-1100-4895-a654-1e2d7aee4120" />
+  </Folder>
+</Solution>
