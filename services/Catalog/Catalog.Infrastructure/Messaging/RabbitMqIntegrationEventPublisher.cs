@@ -90,6 +90,9 @@ internal sealed class RabbitMqIntegrationEventPublisher
         if (type.Contains("ProductPriceChangedIntegrationEvent"))
             return "catalog.product.price-changed";
 
+        if (type.Contains("ProductActivatedIntegrationEvent"))
+            return "catalog.product.activated";
+
         throw new InvalidOperationException(
             $"No routing key is configured for integration event '{type}'.");
     }

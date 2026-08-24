@@ -88,6 +88,11 @@ public sealed class Product
                 "A product must have a valid price before activation.");
 
         Status = ProductStatus.Active;
+
+        _domainEvents.Add(
+      new ProductActivatedDomainEvent(
+          Id,
+          DateTime.UtcNow));
     }
     public void Deactivate()
     {

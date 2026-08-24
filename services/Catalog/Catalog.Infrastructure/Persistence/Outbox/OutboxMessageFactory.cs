@@ -16,6 +16,10 @@ internal static class OutboxMessageFactory
             ProductPriceChangedDomainEvent priceChanged =>
                 CreatePriceChangedMessage(priceChanged),
 
+
+            ProductActivatedDomainEvent activated =>
+CreateProductActivatedMessage(activated),
+
             _ => null
         };
     }
@@ -40,4 +44,23 @@ internal static class OutboxMessageFactory
             OccurredOnUtc = integrationEvent.OccurredOnUtc
         };
     }
+
+    private static OutboxMessage CreateProductActivatedMessage(
+    ProductActivatedDomainEvent domainEvent)
+    {
+        var integrationEvent =
+            new ProductActivatedIntegrationEvent(
+                Guid.NewGuid(),
+                domainEvent.ProductId,
+                domainEvent.OccurredOnUtc);
+
+        return new OutboxMessage
+        {
+            Id = integrationEvent.EventId,
+            Type = typeof(ProductActivatedIntegrationEvent).FullName!,
+            Content = JsonSerializer.Serialize(integrationEvent),
+            OccurredOnUtc = integrationEvent.OccurredOnUtc
+        };
+    }
+
 }
