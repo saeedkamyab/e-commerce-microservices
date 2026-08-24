@@ -1,4 +1,6 @@
-﻿namespace Inventory.Application.Abstractions.Persistence;
+﻿using Inventory.Domain.Entities;
+
+namespace Inventory.Application.Abstractions.Persistence;
 
 public interface IInventoryItemRepository
 {
