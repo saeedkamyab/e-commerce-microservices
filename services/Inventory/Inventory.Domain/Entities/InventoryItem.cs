@@ -13,6 +13,8 @@ public sealed class InventoryItem
     public int AvailableQuantity =>
         Quantity - ReservedQuantity;
 
+    public uint Version { get; private set; }
+
     private InventoryItem()
     {
     }

@@ -8,6 +8,10 @@ public interface IInventoryItemRepository
         Guid productId,
         CancellationToken cancellationToken);
 
+    Task<InventoryItem?> ReloadByProductIdAsync(
+    Guid productId,
+    CancellationToken cancellationToken);
+
     Task AddAsync(
         InventoryItem inventoryItem,
         CancellationToken cancellationToken);

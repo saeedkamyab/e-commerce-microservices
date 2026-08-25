@@ -33,6 +33,9 @@ internal sealed class InventoryItemConfiguration
             .HasColumnName("reserved_quantity")
             .IsRequired();
 
+        builder.Property(x => x.Version)
+    .IsRowVersion();
+
         builder.Ignore(x => x.AvailableQuantity);
     }
 }

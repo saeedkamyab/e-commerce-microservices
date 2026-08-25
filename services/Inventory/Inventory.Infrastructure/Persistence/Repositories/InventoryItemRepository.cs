@@ -25,6 +25,27 @@ internal sealed class InventoryItemRepository
                 cancellationToken);
     }
 
+
+    public async Task<InventoryItem?> ReloadByProductIdAsync(
+    Guid productId,
+    CancellationToken cancellationToken)
+    {
+        var trackedEntry = _dbContext.ChangeTracker
+            .Entries<InventoryItem>()
+            .FirstOrDefault(x => x.Entity.ProductId == productId);
+
+        if (trackedEntry is not null)
+        {
+            await trackedEntry.ReloadAsync(cancellationToken);
+            return trackedEntry.Entity;
+        }
+
+        return await _dbContext.InventoryItems
+            .FirstOrDefaultAsync(
+                x => x.ProductId == productId,
+                cancellationToken);
+    }
+
     public async Task AddAsync(
         InventoryItem inventoryItem,
         CancellationToken cancellationToken)

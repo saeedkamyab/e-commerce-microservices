@@ -1,3 +1,4 @@
+using Inventory.API.Endpoints;
 using Inventory.API.Endpoints.InventoryItems;
 using Inventory.Application;
 using Inventory.Infrastructure;
@@ -18,7 +19,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
-app.MapIncreaseStockEndpoint();
+
+app.MapInventoryEndpoints();
 
 app.Run();
 
