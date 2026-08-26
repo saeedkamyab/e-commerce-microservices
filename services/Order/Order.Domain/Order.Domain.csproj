@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
     <Folder Include="ValueObjects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SharedKernel">
+      <HintPath>..\..\..\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

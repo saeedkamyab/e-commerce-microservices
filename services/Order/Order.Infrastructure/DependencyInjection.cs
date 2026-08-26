@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
+using Order.Infrastructure.Messaging;
 using Order.Infrastructure.Persistence;
+using Order.Infrastructure.Persistence.Outbox;
 using Order.Infrastructure.Persistence.Repositories;
 
 namespace Order.Infrastructure;
@@ -25,6 +28,18 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(sp =>
             sp.GetRequiredService<OrderDbContext>());
+
+
+        services.Configure<RabbitMqOptions>(
+    configuration.GetSection(RabbitMqOptions.SectionName));
+
+        services.AddSingleton<
+            IIntegrationEventPublisher,
+            RabbitMqIntegrationEventPublisher>();
+
+        services.AddScoped<OutboxProcessor>();
+
+        services.AddHostedService<OutboxBackgroundService>();
 
         return services;
     }

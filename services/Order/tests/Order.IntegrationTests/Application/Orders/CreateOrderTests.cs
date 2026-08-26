@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Application.Abstractions.Persistence;
 using Order.Application.Orders.Commands.CreateOrder;
+using Order.Contracts.IntegrationEvents;
 using Order.Domain.Enums;
 using Order.Infrastructure.Persistence.Repositories;
 using Order.IntegrationTests.Infrastructure;
+using System.Text.Json;
 
 namespace Order.IntegrationTests.Application.Orders;
 
@@ -61,6 +63,10 @@ public sealed class CreateOrderTests
                 command,
                 CancellationToken.None);
 
+
+
+
+
         // Assert
         await using var assertionDbContext =
             _fixture.CreateDbContext();
@@ -72,12 +78,48 @@ public sealed class CreateOrderTests
                 .SingleAsync(x => x.Id == orderId);
 
         Assert.Equal(userId, order.UserId);
-        Assert.Equal(OrderStatus.Pending, order.Status);
+        Assert.Equal(
+     OrderStatus.AwaitingInventory,
+     order.Status);
 
         Assert.Equal(2, order.Items.Count);
 
         Assert.Equal(
             450m,
             order.TotalAmount);
+
+        var outboxMessages =
+    await assertionDbContext.OutboxMessages
+        .AsNoTracking()
+        .ToListAsync();
+
+        var outboxMessage = Assert.Single(
+            outboxMessages.Where(x =>
+                x.Type ==
+                typeof(ReserveInventoryRequestedIntegrationEvent).FullName));
+
+        Assert.NotNull(outboxMessage.Content);
+
+        var integrationEvent =
+            JsonSerializer.Deserialize<ReserveInventoryRequestedIntegrationEvent>(
+                outboxMessage.Content);
+
+        Assert.NotNull(integrationEvent);
+
+        Assert.Equal(orderId, integrationEvent.OrderId);
+        Assert.Equal(2, integrationEvent.Items.Count);
+
+        Assert.Contains(
+            integrationEvent.Items,
+            x => x.ProductId == product1Id &&
+                 x.Quantity == 2);
+
+        Assert.Contains(
+            integrationEvent.Items,
+            x => x.ProductId == product2Id &&
+                 x.Quantity == 1);
+
+        Assert.Null(outboxMessage.ProcessedOnUtc);
+        Assert.Null(outboxMessage.Error);
     }
 }

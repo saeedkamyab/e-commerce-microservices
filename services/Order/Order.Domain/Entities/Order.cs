@@ -1,11 +1,13 @@
 ﻿using Order.Domain.Enums;
+using Order.Domain.Events;
+using SharedKernel.Domain;
 
 namespace Order.Domain.Entities;
 
 public sealed class Order
 {
     private readonly List<OrderItem> _items = new();
-
+    private readonly List<IDomainEvent> _domainEvents = new();
     public Guid Id { get; private set; }
 
     public Guid UserId { get; private set; }
@@ -14,6 +16,8 @@ public sealed class Order
 
     public IReadOnlyCollection<OrderItem> Items =>
         _items.AsReadOnly();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents =>
+    _domainEvents.AsReadOnly();
 
     public decimal TotalAmount =>
         _items.Sum(x => x.Total);
@@ -57,10 +61,25 @@ public sealed class Order
     public void StartInventoryReservation()
     {
         if (Status != OrderStatus.Pending)
+        {
             throw new InvalidOperationException(
                 "Inventory reservation can only start for a pending order.");
+        }
 
         Status = OrderStatus.AwaitingInventory;
+
+        var items = _items
+            .Select(x =>
+                new InventoryReservationItem(
+                    x.ProductId,
+                    x.Quantity))
+            .ToArray();
+
+        _domainEvents.Add(
+            new OrderInventoryReservationStartedDomainEvent(
+                Id,
+                items,
+                DateTime.UtcNow));
     }
 
     public void MarkInventoryReserved()
@@ -79,5 +98,9 @@ public sealed class Order
                 "Order is not waiting for inventory.");
 
         Status = OrderStatus.Cancelled;
+    }
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }

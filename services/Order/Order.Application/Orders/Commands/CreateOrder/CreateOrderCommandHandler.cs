@@ -33,6 +33,7 @@ public sealed class CreateOrderCommandHandler
         var order = Domain.Entities.Order.Create(
             request.UserId,
             items);
+        order.StartInventoryReservation();
 
         await _orderRepository.AddAsync(
             order,
