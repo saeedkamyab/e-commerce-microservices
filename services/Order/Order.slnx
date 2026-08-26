@@ -1,1 +1,12 @@
-<Solution />
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Order.API/Order.API.csproj" Id="ed310f55-1307-43a1-b681-b26d30dfaa29" />
+    <Project Path="Order.Application/Order.Application.csproj" Id="07224fd8-de3f-4b9b-b980-82e6c255cdff" />
+    <Project Path="Order.Contracts/Order.Contracts.csproj" Id="d26f776c-365b-4273-a283-9003374a773f" />
+    <Project Path="Order.Domain/Order.Domain.csproj" Id="d1f45602-eb02-4bb2-8859-87635bfa5333" />
+    <Project Path="Order.Infrastructure/Order.Infrastructure.csproj" Id="4bbcd86d-23b2-4280-9112-9b698eb33f94" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Order.UnitTests/Order.UnitTests.csproj" Id="d1457ab9-1141-40c4-be03-f7e60f9c47f1" />
+  </Folder>
+</Solution>
