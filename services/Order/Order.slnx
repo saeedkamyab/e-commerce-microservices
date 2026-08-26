@@ -7,6 +7,7 @@
     <Project Path="Order.Infrastructure/Order.Infrastructure.csproj" Id="4bbcd86d-23b2-4280-9112-9b698eb33f94" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Order.IntegrationTests/Order.IntegrationTests.csproj" Id="b6966010-c5d5-4cd4-a0f0-d26245a96eb5" />
     <Project Path="tests/Order.UnitTests/Order.UnitTests.csproj" Id="d1457ab9-1141-40c4-be03-f7e60f9c47f1" />
   </Folder>
 </Solution>
