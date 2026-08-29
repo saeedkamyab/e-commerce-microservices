@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Payment.Application.Abstractions.Messaging;
 using Payment.Application.Abstractions.Persistence;
+using Payment.Infrastructure.Messaging;
 using Payment.Infrastructure.Persistence;
+using Payment.Infrastructure.Persistence.Inbox;
 using Payment.Infrastructure.Persistence.Repositories;
 
 namespace Payment.Infrastructure;
@@ -28,6 +31,15 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(
             sp => sp.GetRequiredService<PaymentDbContext>());
+
+        services.AddScoped<InboxProcessor>();
+
+        services.AddScoped<
+            IIntegrationEventHandler,
+            PaymentRequestedIntegrationEventHandler>();
+
+        services.AddScoped<IntegrationEventDispatcher>();
+
 
         return services;
     }
