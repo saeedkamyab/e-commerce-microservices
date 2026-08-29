@@ -1,6 +1,7 @@
 ﻿using Inventory.Contracts.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Order.Application.Abstractions.Persistence;
+using Order.Contracts.IntegrationEvents;
 using Order.Domain.Entities;
 using Order.Domain.Enums;
 using Order.Infrastructure.Messaging;
@@ -310,5 +311,98 @@ public sealed class InventoryResultInboxTests
                     x.MessageId == messageId);
 
         Assert.Equal(1, inboxCount);
+    }
+
+    [Fact]
+    public async Task Handle_Should_Mark_Order_As_InventoryReserved_And_Create_PaymentRequested_Outbox_Message()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        var order = Domain.Entities.Order.Create(
+            Guid.NewGuid(),
+            new[]
+            {
+                 OrderItem.Create(
+                    Guid.NewGuid(),
+                    2,
+                    1200m)
+            });
+
+        order.StartInventoryReservation();
+
+        dbContext.Orders.Add(order);
+
+        await dbContext.SaveChangesAsync();
+
+        // Outbox مربوط به StartInventoryReservation را پاک می‌کنیم
+        // چون در این تست فقط PaymentRequested برایمان مهم است.
+        dbContext.OutboxMessages.RemoveRange(
+            dbContext.OutboxMessages);
+
+        await dbContext.SaveChangesAsync();
+
+        var repository =
+            new OrderRepository(dbContext);
+
+        var handler =
+            new InventoryReservedIntegrationEventHandler(
+                repository,
+                dbContext);
+
+        var integrationEvent =
+            new InventoryReservedIntegrationEvent(
+                Guid.NewGuid(),
+                order.Id,
+                DateTime.UtcNow);
+
+        var content =
+            JsonSerializer.Serialize(integrationEvent);
+
+        // Act
+        await handler.HandleAsync(
+            integrationEvent.MessageId,
+            typeof(InventoryReservedIntegrationEvent).FullName!,
+            content,
+            CancellationToken.None);
+
+        // Assert
+        await using var assertionContext =
+            _fixture.CreateDbContext();
+
+        var persistedOrder =
+            await assertionContext.Orders
+                .AsNoTracking()
+                .SingleAsync(x => x.Id == order.Id);
+
+        Assert.Equal(
+            OrderStatus.InventoryReserved,
+            persistedOrder.Status);
+
+        var outboxMessage =
+            await assertionContext.OutboxMessages
+                .AsNoTracking()
+                .SingleAsync(x =>
+                    x.Type ==
+                    typeof(PaymentRequestedIntegrationEvent).FullName);
+
+        var paymentRequested =
+            JsonSerializer.Deserialize<
+                PaymentRequestedIntegrationEvent>(
+                    outboxMessage.Content);
+
+        Assert.NotNull(paymentRequested);
+
+        Assert.Equal(
+            order.Id,
+            paymentRequested!.OrderId);
+
+        Assert.Equal(
+            order.TotalAmount,
+            paymentRequested.Amount);
+
+        Assert.Null(
+            outboxMessage.ProcessedOnUtc);
     }
 }
