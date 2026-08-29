@@ -2,6 +2,7 @@
 using Inventory.Application.Abstractions.Messaging;
 using Inventory.Application.Abstractions.Persistence;
 using Inventory.Application.InventoryItems.Commands.CreateInventoryItem;
+using Inventory.Infrastructure.Messaging;
 using Inventory.Infrastructure.Persistence.Inbox;
 using Inventory.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,14 @@ public sealed class ProductActivatedInboxTests
             new TestProductActivatedIntegrationEventHandler(
                 commandHandler);
 
+        var dispatcher =
+            new IntegrationEventDispatcher(
+                [integrationEventHandler]);
+
         var inboxProcessor =
             new InboxProcessor(
                 dbContext,
-                integrationEventHandler);
+                dispatcher);
 
         var messageId = Guid.NewGuid();
         var productId = Guid.NewGuid();
@@ -89,14 +94,18 @@ public sealed class ProductActivatedInboxTests
                 .CountAsync(
                     x => x.ProductId == productId);
 
-        Assert.Equal(1, inventoryItemsCount);
+        Assert.Equal(
+            1,
+            inventoryItemsCount);
 
         var inboxMessagesCount =
             await assertionDbContext.InboxMessages
                 .CountAsync(
                     x => x.MessageId == messageId);
 
-        Assert.Equal(1, inboxMessagesCount);
+        Assert.Equal(
+            1,
+            inboxMessagesCount);
 
         var inboxMessage =
             await assertionDbContext.InboxMessages
@@ -104,8 +113,11 @@ public sealed class ProductActivatedInboxTests
                 .SingleAsync(
                     x => x.MessageId == messageId);
 
-        Assert.NotNull(inboxMessage.ProcessedOnUtc);
-        Assert.Null(inboxMessage.Error);
+        Assert.NotNull(
+            inboxMessage.ProcessedOnUtc);
+
+        Assert.Null(
+            inboxMessage.Error);
     }
 
     private sealed class TestProductActivatedIntegrationEventHandler
@@ -118,6 +130,9 @@ public sealed class ProductActivatedInboxTests
         {
             _handler = handler;
         }
+
+        public string EventType =>
+            typeof(ProductActivatedIntegrationEvent).FullName!;
 
         public async Task HandleAsync(
             Guid messageId,

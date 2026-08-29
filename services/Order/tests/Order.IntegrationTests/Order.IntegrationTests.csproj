@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Inventory.Contracts">
+      <HintPath>..\..\..\Inventory\Inventory.Infrastructure\bin\Debug\net10.0\Inventory.Contracts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

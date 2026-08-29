@@ -10,6 +10,8 @@ internal sealed class ProductActivatedIntegrationEventHandler
     : IIntegrationEventHandler
 {
     private readonly ISender _sender;
+    public string EventType =>
+    typeof(ProductActivatedIntegrationEvent).FullName!;
 
     public ProductActivatedIntegrationEventHandler(
         ISender sender)

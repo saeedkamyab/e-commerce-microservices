@@ -13,6 +13,12 @@ internal sealed class RabbitMqTopologyInitializer
 
     private readonly RabbitMqOptions _options;
 
+    public const string ReserveInventoryQueueName =
+    "inventory.reserve-inventory";
+
+    public const string ReserveInventoryRoutingKey =
+        "order.inventory.reserve-requested";
+
     public RabbitMqTopologyInitializer(
         IOptions<RabbitMqOptions> options)
     {
@@ -58,6 +64,21 @@ internal sealed class RabbitMqTopologyInitializer
             queue: QueueName,
             exchange: _options.Exchange,
             routingKey: RoutingKey,
+            arguments: null,
+            cancellationToken: cancellationToken);
+
+        await channel.QueueDeclareAsync(
+    queue: ReserveInventoryQueueName,
+    durable: true,
+    exclusive: false,
+    autoDelete: false,
+    arguments: null,
+    cancellationToken: cancellationToken);
+
+        await channel.QueueBindAsync(
+            queue: ReserveInventoryQueueName,
+            exchange: _options.Exchange,
+            routingKey: ReserveInventoryRoutingKey,
             arguments: null,
             cancellationToken: cancellationToken);
     }

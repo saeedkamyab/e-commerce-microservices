@@ -1,4 +1,5 @@
 ﻿using Inventory.Application.Abstractions.Messaging;
+using Inventory.Infrastructure.Messaging;
 using Inventory.Infrastructure.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,14 +8,14 @@ namespace Inventory.Infrastructure.Persistence.Inbox;
 internal sealed class InboxProcessor
 {
     private readonly InventoryDbContext _dbContext;
-    private readonly IIntegrationEventHandler _handler;
 
+    private readonly IntegrationEventDispatcher _dispatcher;
     public InboxProcessor(
         InventoryDbContext dbContext,
-        IIntegrationEventHandler handler)
+         IntegrationEventDispatcher dispatcher)
     {
         _dbContext = dbContext;
-        _handler = handler;
+        _dispatcher = dispatcher;
     }
 
     public async Task<bool> ProcessAsync(
@@ -56,11 +57,11 @@ internal sealed class InboxProcessor
                     cancellationToken);
             }
 
-            await _handler.HandleAsync(
-                messageId,
-                type,
-                content,
-                cancellationToken);
+            await _dispatcher.DispatchAsync(
+        messageId,
+        type,
+        content,
+        cancellationToken);
 
             inboxMessage.ProcessedOnUtc = DateTime.UtcNow;
             inboxMessage.Error = null;

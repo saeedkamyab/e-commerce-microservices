@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Inventory.Contracts">
+      <HintPath>..\..\Inventory\Inventory.Infrastructure\bin\Debug\net10.0\Inventory.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="SharedKernel">
       <HintPath>..\..\..\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.dll</HintPath>
     </Reference>

@@ -73,6 +73,35 @@ namespace Order.Infrastructure.Persistence.Migrations
                     b.ToTable("order_items", (string)null);
                 });
 
+            modelBuilder.Entity("Order.Infrastructure.Persistence.Models.InboxMessage", b =>
+                {
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("message_id");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text")
+                        .HasColumnName("error");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_on_utc");
+
+                    b.Property<DateTime>("ReceivedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("received_on_utc");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("type");
+
+                    b.HasKey("MessageId");
+
+                    b.ToTable("inbox_messages", (string)null);
+                });
+
             modelBuilder.Entity("Order.Infrastructure.Persistence.Models.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")

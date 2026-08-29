@@ -20,6 +20,9 @@ internal sealed class InventoryDbContext
     internal DbSet<InboxMessage> InboxMessages =>
     Set<InboxMessage>();
 
+    internal DbSet<OutboxMessage> OutboxMessages =>
+    Set<OutboxMessage>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {

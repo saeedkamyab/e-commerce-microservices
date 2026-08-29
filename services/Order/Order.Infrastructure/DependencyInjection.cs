@@ -5,6 +5,7 @@ using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
 using Order.Infrastructure.Messaging;
 using Order.Infrastructure.Persistence;
+using Order.Infrastructure.Persistence.Inbox;
 using Order.Infrastructure.Persistence.Outbox;
 using Order.Infrastructure.Persistence.Repositories;
 
@@ -40,6 +41,27 @@ public static class DependencyInjection
         services.AddScoped<OutboxProcessor>();
 
         services.AddHostedService<OutboxBackgroundService>();
+
+
+        services.AddScoped<InboxProcessor>();
+        services.AddScoped<IntegrationEventDispatcher>();
+
+        services.AddScoped<
+            IIntegrationEventHandler,
+            InventoryReservedIntegrationEventHandler>();
+
+        services.AddScoped<
+            IIntegrationEventHandler,
+            InventoryReservationFailedIntegrationEventHandler>();
+
+        services.AddSingleton<
+    RabbitMqTopologyInitializer>();
+
+        services.AddHostedService<
+            RabbitMqTopologyHostedService>();
+
+        services.AddHostedService<
+            InventoryResultConsumer>();
 
         return services;
     }

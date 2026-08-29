@@ -24,6 +24,10 @@ internal sealed class OrderDbContext
     internal DbSet<OutboxMessage> OutboxMessages =>
     Set<OutboxMessage>();
 
+
+    internal DbSet<InboxMessage> InboxMessages =>
+    Set<InboxMessage>();
+
     public override async Task<int> SaveChangesAsync(
     CancellationToken cancellationToken = default)
     {

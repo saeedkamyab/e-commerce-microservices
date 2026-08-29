@@ -1,1 +1,14 @@
-<Solution />
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Payment.API/Payment.API.csproj" Id="c9ba2358-f27f-4e86-b5eb-50dadd54b208" />
+    <Project Path="Payment.Application/Payment.Application.csproj" Id="b3428206-24f7-43d9-bc82-ca98ef0b21d1" />
+    <Project Path="Payment.Contracts/Payment.Contracts.csproj" Id="c587aec5-767b-4a68-a9fa-c45d2fdd5ca8" />
+    <Project Path="Payment.Domain/Payment.Domain.csproj" Id="cefc5ef8-01fa-46c9-9410-e9e151dfc5a8" />
+    <Project Path="Payment.Infrastructure/Payment.Infrastructure.csproj" Id="c3551be6-58b3-41e3-baeb-7af8513988d3" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Payment.ArchitectureTests/Payment.ArchitectureTests.csproj" Id="fca7d705-46b7-4458-a0d6-75df2ba1cf5c" />
+    <Project Path="tests/Payment.IntegrationTests/Payment.IntegrationTests.csproj" Id="fb03f612-f8f2-4749-952f-9510ade66718" />
+    <Project Path="tests/Payment.UnitTests/Payment.UnitTests.csproj" Id="3cf3a0c9-4921-413d-8353-de1d4cbb9d80" />
+  </Folder>
+</Solution>
