@@ -16,8 +16,11 @@ internal static class OutboxMessageFactory
             OrderInventoryReservationStartedDomainEvent e =>
                 CreateReserveInventoryRequested(e),
 
+            OrderPaymentRequestedDomainEvent e =>
+            CreatePaymentRequested(e),
+
             _ => throw new InvalidOperationException(
-                $"Unsupported domain event: {domainEvent.GetType().Name}")
+                    $"Unsupported domain event: {domainEvent.GetType().Name}")
         };
     }
 
@@ -43,6 +46,26 @@ internal static class OutboxMessageFactory
                 ReserveInventoryRequestedIntegrationEvent).FullName!,
             Content = JsonSerializer.Serialize(
                 integrationEvent),
+            OccurredOnUtc = integrationEvent.OccurredOnUtc
+        };
+    }
+
+
+    private static OutboxMessage CreatePaymentRequested(
+          OrderPaymentRequestedDomainEvent domainEvent)
+    {
+        var integrationEvent =
+         new PaymentRequestedIntegrationEvent(
+             Guid.NewGuid(),
+             domainEvent.OrderId,
+             domainEvent.Amount,
+             domainEvent.OccurredOnUtc);
+
+        return new OutboxMessage
+        {
+            Id = integrationEvent.MessageId,
+            Type = typeof(PaymentRequestedIntegrationEvent).FullName!,
+            Content = JsonSerializer.Serialize(integrationEvent),
             OccurredOnUtc = integrationEvent.OccurredOnUtc
         };
     }

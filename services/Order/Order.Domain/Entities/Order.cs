@@ -89,6 +89,12 @@ public sealed class Order
                 "Order is not waiting for inventory.");
 
         Status = OrderStatus.InventoryReserved;
+
+        _domainEvents.Add(
+        new OrderPaymentRequestedDomainEvent(
+            Id,
+            TotalAmount,
+            DateTime.UtcNow));
     }
 
     public void MarkInventoryFailed()
