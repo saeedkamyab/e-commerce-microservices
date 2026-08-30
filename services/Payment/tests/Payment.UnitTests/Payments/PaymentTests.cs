@@ -43,7 +43,7 @@ public sealed class PaymentTests
             Guid.NewGuid(),
             1200m);
 
-        payment.MarkFailed();
+        payment.MarkFailed("Payment provider rejected the payment.");
 
         Assert.Equal(
             PaymentStatus.Failed,
@@ -75,6 +75,6 @@ public sealed class PaymentTests
         payment.MarkSucceeded();
 
         Assert.Throws<InvalidOperationException>(
-            payment.MarkFailed);
+            () => payment.MarkFailed("Payment provider rejected the payment."));
     }
 }

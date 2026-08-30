@@ -6,6 +6,7 @@ using Payment.Application.Abstractions.Persistence;
 using Payment.Infrastructure.Messaging;
 using Payment.Infrastructure.Persistence;
 using Payment.Infrastructure.Persistence.Inbox;
+using Payment.Infrastructure.Persistence.Outbox;
 using Payment.Infrastructure.Persistence.Repositories;
 
 namespace Payment.Infrastructure;
@@ -40,6 +41,27 @@ public static class DependencyInjection
 
         services.AddScoped<IntegrationEventDispatcher>();
 
+        services.Configure<RabbitMqOptions>(
+            configuration.GetSection(RabbitMqOptions.SectionName));
+
+        services.AddSingleton<
+            RabbitMqTopologyInitializer>();
+
+        services.AddHostedService<
+            RabbitMqTopologyHostedService>();
+
+        services.AddHostedService<
+            PaymentRequestedConsumer>();
+
+
+        services.AddSingleton<
+    IIntegrationEventPublisher,
+    RabbitMqIntegrationEventPublisher>();
+
+        services.AddScoped<OutboxProcessor>();
+
+        services.AddHostedService<
+            OutboxBackgroundService>();
 
         return services;
     }

@@ -16,9 +16,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.11" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,9 @@
   <ItemGroup>
     <Reference Include="Order.Contracts">
       <HintPath>..\..\Order\Order.Contracts\bin\Debug\net10.0\Order.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="SharedKernel">
+      <HintPath>..\..\..\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.dll</HintPath>
     </Reference>
   </ItemGroup>
 

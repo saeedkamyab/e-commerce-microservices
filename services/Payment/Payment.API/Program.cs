@@ -1,10 +1,13 @@
 using Payment.Infrastructure;
+using Payment.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
-builder.Services.AddInfrastructure(builder.Configuration);
 
 
 var app = builder.Build();

@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="SharedKernel">
+      <HintPath>..\..\..\building-blocks\BuildingBlocks\SharedKernel\bin\Debug\net10.0\SharedKernel.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

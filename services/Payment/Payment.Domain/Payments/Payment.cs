@@ -1,9 +1,14 @@
 ﻿using Payment.Domain.Enums;
+using Payment.Domain.Events;
+using SharedKernel.Domain;
 
 namespace Payment.Domain.Payments;
 
 public sealed class Payment
 {
+    private readonly List<IDomainEvent> _domainEvents = [];
+
+
     public Guid Id { get; private set; }
 
     public Guid OrderId { get; private set; }
@@ -15,6 +20,9 @@ public sealed class Payment
     public DateTime CreatedOnUtc { get; private set; }
 
     public DateTime? CompletedOnUtc { get; private set; }
+
+    public IReadOnlyCollection<IDomainEvent> DomainEvents =>
+       _domainEvents.AsReadOnly();
 
     private Payment()
     {
@@ -59,15 +67,41 @@ public sealed class Payment
 
         Status = PaymentStatus.Succeeded;
         CompletedOnUtc = DateTime.UtcNow;
+
+        _domainEvents.Add(
+       new PaymentSucceededDomainEvent(
+           Id,
+           OrderId,
+           Amount,
+           CompletedOnUtc.Value));
+
     }
 
-    public void MarkFailed()
+    public void MarkFailed(string reason)
     {
         if (Status != PaymentStatus.Pending)
             throw new InvalidOperationException(
                 $"Cannot fail payment in status {Status}.");
 
+        if (string.IsNullOrWhiteSpace(reason))
+            throw new ArgumentException(
+                "Failure reason is required.",
+                nameof(reason));
+
+
         Status = PaymentStatus.Failed;
         CompletedOnUtc = DateTime.UtcNow;
+
+        _domainEvents.Add(
+       new PaymentFailedDomainEvent(
+           Id,
+           OrderId,
+           reason,
+           CompletedOnUtc.Value));
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
