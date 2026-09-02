@@ -14,6 +14,9 @@ internal sealed class RabbitMqTopologyInitializer
     public const string InventoryReservationFailedRoutingKey =
         "inventory.reservation.failed";
 
+    public const string PaymentResultsQueue =
+    "order.payment-results";
+
     private readonly RabbitMqOptions _options;
 
     public RabbitMqTopologyInitializer(
@@ -70,5 +73,36 @@ internal sealed class RabbitMqTopologyInitializer
             routingKey: InventoryReservationFailedRoutingKey,
             arguments: null,
             cancellationToken: cancellationToken);
+
+
+        await channel.QueueDeclareAsync(
+    queue: PaymentResultsQueue,
+    durable: true,
+    exclusive: false,
+    autoDelete: false,
+    arguments: null,
+    cancellationToken: cancellationToken);
+
+        await channel.QueueBindAsync(
+            queue: PaymentResultsQueue,
+            exchange: _options.Exchange,
+            routingKey: "payment.succeeded",
+            arguments: null,
+            cancellationToken: cancellationToken);
+
+        await channel.QueueBindAsync(
+            queue: PaymentResultsQueue,
+            exchange: _options.Exchange,
+            routingKey: "payment.failed",
+            arguments: null,
+            cancellationToken: cancellationToken);
+
+        await channel.QueueBindAsync(
+    queue: PaymentResultsQueue,
+    exchange: _options.Exchange,
+    routingKey: "inventory.released",
+    arguments: null,
+    cancellationToken: cancellationToken);
+
     }
 }

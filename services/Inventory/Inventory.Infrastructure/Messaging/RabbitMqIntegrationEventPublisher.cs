@@ -93,6 +93,13 @@ internal class RabbitMqIntegrationEventPublisher : IIntegrationEventPublisher, I
         if (type == typeof(InventoryReservationFailedIntegrationEvent).FullName)
             return "inventory.reservation.failed";
 
+        if (type ==
+    typeof(InventoryReleasedIntegrationEvent).FullName)
+        {
+            return "inventory.released";
+        }
+
+
         throw new InvalidOperationException(
             $"No routing key is configured for integration event '{type}'.");
     }

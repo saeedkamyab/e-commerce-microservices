@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Payment.Application.Abstractions.Payments;
 using Payment.Application.Abstractions.Persistence;
+using Payment.Domain.Enums;
 
 namespace Payment.Application.Payments.Commands.ProcessPayment;
 
@@ -31,6 +32,11 @@ public sealed class ProcessPaymentCommandHandler
                 cancellationToken)
             ?? throw new InvalidOperationException(
                 $"Payment '{request.PaymentId}' was not found.");
+       
+        if (payment.Status != PaymentStatus.Pending)
+        {
+            return;
+        }
 
         var result =
             await _paymentGateway.ChargeAsync(

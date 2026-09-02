@@ -19,6 +19,13 @@ internal sealed class RabbitMqTopologyInitializer
     public const string ReserveInventoryRoutingKey =
         "order.inventory.reserve-requested";
 
+
+    public const string ReleaseInventoryQueueName =
+    "inventory.release-inventory";
+
+    public const string ReleaseInventoryRoutingKey =
+        "order.inventory.release-requested";
+
     public RabbitMqTopologyInitializer(
         IOptions<RabbitMqOptions> options)
     {
@@ -81,5 +88,21 @@ internal sealed class RabbitMqTopologyInitializer
             routingKey: ReserveInventoryRoutingKey,
             arguments: null,
             cancellationToken: cancellationToken);
+
+
+        await channel.QueueDeclareAsync(
+    queue: ReleaseInventoryQueueName,
+    durable: true,
+    exclusive: false,
+    autoDelete: false,
+    arguments: null,
+    cancellationToken: cancellationToken);
+
+        await channel.QueueBindAsync(
+    queue: ReleaseInventoryQueueName,
+    exchange: _options.Exchange,
+    routingKey: ReleaseInventoryRoutingKey,
+    arguments: null,
+    cancellationToken: cancellationToken);
     }
 }

@@ -1,12 +1,16 @@
 ﻿using Inventory.Contracts.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
+using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
 using Order.Contracts.IntegrationEvents;
 using Order.Domain.Entities;
 using Order.Domain.Enums;
 using Order.Infrastructure.Messaging;
+using Order.Infrastructure.Messaging.Inventory;
+using Order.Infrastructure.Messaging.Payment;
 using Order.Infrastructure.Persistence.Inbox;
 using Order.Infrastructure.Persistence.Repositories;
+using Payment.Contracts.IntegrationEvents;
 using System.Text.Json;
 
 namespace Order.IntegrationTests.Infrastructure.Inbox;
@@ -405,4 +409,277 @@ public sealed class InventoryResultInboxTests
         Assert.Null(
             outboxMessage.ProcessedOnUtc);
     }
+
+    [Fact]
+    public async Task ProcessAsync_When_Payment_Fails_Should_Mark_Order_As_PaymentFailed_And_Create_ReleaseInventoryRequested_Outbox_Message()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        await dbContext.InboxMessages.ExecuteDeleteAsync();
+        await dbContext.OutboxMessages.ExecuteDeleteAsync();
+        await dbContext.OrderItems.ExecuteDeleteAsync();
+        await dbContext.Orders.ExecuteDeleteAsync();
+
+        var productId = Guid.NewGuid();
+
+        var orderItem =
+            Order.Domain.Entities.OrderItem.Create(
+                productId,
+                quantity: 2,
+                unitPrice: 1200m);
+
+        var order =
+            Order.Domain.Entities.Order.Create(
+                Guid.NewGuid(),
+                [orderItem]);
+
+        order.StartInventoryReservation();
+
+        await dbContext.Orders.AddAsync(order);
+
+        await dbContext.SaveChangesAsync();
+
+  
+        await dbContext.OutboxMessages.ExecuteDeleteAsync();
+
+        order.MarkInventoryReserved();
+
+        await dbContext.SaveChangesAsync();
+
+       
+        await dbContext.OutboxMessages.ExecuteDeleteAsync();
+
+        var integrationEvent =
+            new PaymentFailedIntegrationEvent(
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                order.Id,
+                "Card was declined.",
+                DateTime.UtcNow);
+
+        var handler =
+            new PaymentFailedIntegrationEventHandler(
+                new OrderRepository(dbContext),
+                dbContext);
+
+        var dispatcher =
+            new IntegrationEventDispatcher(
+                new IIntegrationEventHandler[]
+                {
+                    handler
+                });
+
+        var inboxProcessor =
+            new InboxProcessor(
+                dbContext,
+                dispatcher);
+
+        var content =
+            JsonSerializer.Serialize(
+                integrationEvent);
+
+        // Act
+        var processed =
+            await inboxProcessor.ProcessAsync(
+                integrationEvent.MessageId,
+                typeof(PaymentFailedIntegrationEvent).FullName!,
+                content,
+                CancellationToken.None);
+
+        // Assert
+        Assert.True(processed);
+
+        await using var assertionContext =
+            _fixture.CreateDbContext();
+
+        var persistedOrder =
+            await assertionContext.Orders
+                .AsNoTracking()
+                .Include(x => x.Items)
+                .SingleAsync(x => x.Id == order.Id);
+
+        Assert.Equal(
+            OrderStatus.PaymentFailed,
+            persistedOrder.Status);
+
+        var inboxMessage =
+            await assertionContext.InboxMessages
+                .AsNoTracking()
+                .SingleAsync(x =>
+                    x.MessageId ==
+                    integrationEvent.MessageId);
+
+        Assert.NotNull(
+            inboxMessage.ProcessedOnUtc);
+
+        Assert.Null(
+            inboxMessage.Error);
+
+        var outboxMessage =
+            await assertionContext.OutboxMessages
+                .AsNoTracking()
+                .SingleAsync(x =>
+                    x.Type ==
+                    typeof(
+                        ReleaseInventoryRequestedIntegrationEvent)
+                    .FullName);
+
+        Assert.Null(
+            outboxMessage.ProcessedOnUtc);
+
+        Assert.Null(
+            outboxMessage.Error);
+
+        var releaseEvent =
+            JsonSerializer.Deserialize<
+                ReleaseInventoryRequestedIntegrationEvent>(
+                outboxMessage.Content);
+
+        Assert.NotNull(releaseEvent);
+
+        Assert.Equal(
+            order.Id,
+            releaseEvent.OrderId);
+
+        Assert.Single(
+            releaseEvent.Items);
+
+        var releasedItem =
+            releaseEvent.Items.Single();
+
+        Assert.Equal(
+            productId,
+            releasedItem.ProductId);
+
+        Assert.Equal(
+            2,
+            releasedItem.Quantity);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_When_Inventory_Is_Released_After_Payment_Failure_Should_Cancel_Order()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        await dbContext.InboxMessages
+            .ExecuteDeleteAsync();
+
+        await dbContext.OutboxMessages
+            .ExecuteDeleteAsync();
+
+        var productId = Guid.NewGuid();
+
+        var orderItem =
+            Order.Domain.Entities.OrderItem.Create(
+                productId,
+                quantity: 2,
+                unitPrice: 1200m);
+
+        var order =
+            Order.Domain.Entities.Order.Create(
+                Guid.NewGuid(),
+                [orderItem]);
+
+      
+        order.StartInventoryReservation();
+
+        dbContext.Orders.Add(order);
+
+        await dbContext.SaveChangesAsync();
+
+      
+        await dbContext.OutboxMessages
+            .ExecuteDeleteAsync();
+
+        order.MarkInventoryReserved();
+
+        await dbContext.SaveChangesAsync();
+
+       
+        await dbContext.OutboxMessages
+            .ExecuteDeleteAsync();
+
+        order.MarkPaymentFailed();
+
+        await dbContext.SaveChangesAsync();
+
+
+        await dbContext.OutboxMessages
+            .ExecuteDeleteAsync();
+
+        Assert.Equal(
+            OrderStatus.PaymentFailed,
+            order.Status);
+
+        var integrationEvent =
+            new InventoryReleasedIntegrationEvent(
+                Guid.NewGuid(),
+                order.Id,
+                DateTime.UtcNow);
+
+        var handler =
+            new InventoryReleasedIntegrationEventHandler(
+                new OrderRepository(dbContext),
+                dbContext);
+
+        IIntegrationEventHandler[] handlers =
+        [
+            handler
+        ];
+
+        var dispatcher =
+            new IntegrationEventDispatcher(
+                handlers);
+
+        var inboxProcessor =
+            new InboxProcessor(
+                dbContext,
+                dispatcher);
+
+        var content =
+            JsonSerializer.Serialize(
+                integrationEvent);
+
+        // Act
+        var processed =
+            await inboxProcessor.ProcessAsync(
+                integrationEvent.MessageId,
+                typeof(InventoryReleasedIntegrationEvent).FullName!,
+                content,
+                CancellationToken.None);
+
+        // Assert
+        Assert.True(processed);
+
+        await using var assertionContext =
+            _fixture.CreateDbContext();
+
+        var persistedOrder =
+            await assertionContext.Orders
+                .AsNoTracking()
+                .SingleAsync(x =>
+                    x.Id == order.Id);
+
+        Assert.Equal(
+            OrderStatus.Cancelled,
+            persistedOrder.Status);
+
+        var inboxMessage =
+            await assertionContext.InboxMessages
+                .AsNoTracking()
+                .SingleAsync(x =>
+                    x.MessageId ==
+                    integrationEvent.MessageId);
+
+        Assert.NotNull(
+            inboxMessage.ProcessedOnUtc);
+
+        Assert.Null(
+            inboxMessage.Error);
+    }
+
 }

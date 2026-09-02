@@ -105,8 +105,57 @@ public sealed class Order
 
         Status = OrderStatus.Cancelled;
     }
+
+    public void MarkPaymentSucceeded()
+    {
+        if (Status != OrderStatus.InventoryReserved)
+        {
+            throw new InvalidOperationException(
+                $"Order in status '{Status}' cannot be marked as paid.");
+        }
+
+        Status = OrderStatus.Paid;
+    }
+   
+    public void MarkPaymentFailed()
+    {
+        if (Status != OrderStatus.InventoryReserved)
+        {
+            throw new InvalidOperationException(
+                $"Order in status '{Status}' cannot be marked as payment failed.");
+        }
+
+        Status = OrderStatus.PaymentFailed;
+
+        var items = _items
+            .Select(x => new InventoryReservationItem(
+                x.ProductId,
+                x.Quantity))
+            .ToArray();
+
+        _domainEvents.Add(
+            new OrderPaymentFailedDomainEvent(
+                Id,
+                items,
+                DateTime.UtcNow));
+    }
+
+
+    public void MarkCancelledAfterInventoryRelease()
+    {
+        if (Status != OrderStatus.PaymentFailed)
+        {
+            throw new InvalidOperationException(
+                $"Order in status '{Status}' cannot be cancelled after inventory release.");
+        }
+
+        Status = OrderStatus.Cancelled;
+    }
+
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
     }
+
+
 }

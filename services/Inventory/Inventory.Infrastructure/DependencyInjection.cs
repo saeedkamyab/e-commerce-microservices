@@ -73,6 +73,16 @@ public static class DependencyInjection
         services.AddHostedService<
             OutboxBackgroundService>();
 
+
+        services.AddScoped<
+    IIntegrationEventHandler,
+    ReleaseInventoryRequestedIntegrationEventHandler>();
+
+
+        services.AddHostedService<
+    ReleaseInventoryRequestedConsumer>();
+
+
         return services;
     }
 }

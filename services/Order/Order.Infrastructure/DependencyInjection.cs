@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
 using Order.Infrastructure.Messaging;
+using Order.Infrastructure.Messaging.Inventory;
+using Order.Infrastructure.Messaging.Payment;
 using Order.Infrastructure.Persistence;
 using Order.Infrastructure.Persistence.Inbox;
 using Order.Infrastructure.Persistence.Outbox;
@@ -54,14 +56,32 @@ public static class DependencyInjection
             IIntegrationEventHandler,
             InventoryReservationFailedIntegrationEventHandler>();
 
+
+        services.AddScoped<
+    IIntegrationEventHandler,
+    PaymentSucceededIntegrationEventHandler>();
+
+        services.AddScoped<
+            IIntegrationEventHandler,
+            PaymentFailedIntegrationEventHandler>();
+
         services.AddSingleton<
     RabbitMqTopologyInitializer>();
 
         services.AddHostedService<
             RabbitMqTopologyHostedService>();
 
+
         services.AddHostedService<
             InventoryResultConsumer>();
+
+        services.AddHostedService<
+            PaymentResultConsumer>();
+
+
+        services.AddScoped<
+    IIntegrationEventHandler,
+    InventoryReleasedIntegrationEventHandler>();
 
         return services;
     }

@@ -95,6 +95,13 @@ internal sealed class RabbitMqIntegrationEventPublisher
         if (type == typeof(PaymentRequestedIntegrationEvent).FullName)
             return "order.payment.requested";
 
+
+        if (type ==
+    typeof(ReleaseInventoryRequestedIntegrationEvent).FullName)
+        {
+            return "order.inventory.release-requested";
+        }
+
         throw new InvalidOperationException(
             $"No routing key is configured for integration event '{type}'.");
     }

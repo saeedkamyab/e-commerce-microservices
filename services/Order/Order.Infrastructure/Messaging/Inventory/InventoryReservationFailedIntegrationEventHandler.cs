@@ -3,15 +3,15 @@ using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
 using System.Text.Json;
 
-namespace Order.Infrastructure.Messaging;
+namespace Order.Infrastructure.Messaging.Inventory;
 
-internal sealed class InventoryReservedIntegrationEventHandler
+internal sealed class InventoryReservationFailedIntegrationEventHandler
     : IIntegrationEventHandler
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public InventoryReservedIntegrationEventHandler(
+    public InventoryReservationFailedIntegrationEventHandler(
         IOrderRepository orderRepository,
         IUnitOfWork unitOfWork)
     {
@@ -20,7 +20,7 @@ internal sealed class InventoryReservedIntegrationEventHandler
     }
 
     public string EventType =>
-        typeof(InventoryReservedIntegrationEvent).FullName!;
+        typeof(InventoryReservationFailedIntegrationEvent).FullName!;
 
     public async Task HandleAsync(
         Guid messageId,
@@ -30,9 +30,9 @@ internal sealed class InventoryReservedIntegrationEventHandler
     {
         var integrationEvent =
             JsonSerializer.Deserialize<
-                InventoryReservedIntegrationEvent>(content)
+                InventoryReservationFailedIntegrationEvent>(content)
             ?? throw new InvalidOperationException(
-                "InventoryReservedIntegrationEvent could not be deserialized.");
+                "InventoryReservationFailedIntegrationEvent could not be deserialized.");
 
         var order =
             await _orderRepository.GetByIdAsync(
@@ -45,7 +45,7 @@ internal sealed class InventoryReservedIntegrationEventHandler
                 $"Order '{integrationEvent.OrderId}' was not found.");
         }
 
-        order.MarkInventoryReserved();
+        order.MarkInventoryFailed();
 
         await _unitOfWork.SaveChangesAsync(
             cancellationToken);

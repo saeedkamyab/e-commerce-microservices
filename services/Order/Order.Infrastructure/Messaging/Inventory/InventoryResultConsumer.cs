@@ -7,7 +7,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
-namespace Order.Infrastructure.Messaging;
+namespace Order.Infrastructure.Messaging.Inventory;
 
 internal sealed class InventoryResultConsumer
     : BackgroundService

@@ -78,13 +78,19 @@ public sealed class InventoryItem
 
     public void ReleaseReservation(int quantity)
     {
+       
         if (quantity <= 0)
+        {
             throw new ArgumentOutOfRangeException(
-                nameof(quantity));
+                nameof(quantity),
+                "Quantity must be greater than zero.");
+        }
 
-        if (quantity > ReservedQuantity)
+        if (ReservedQuantity < quantity)
+        {
             throw new InvalidOperationException(
-                "Cannot release more than the reserved quantity.");
+                "Cannot release more quantity than currently reserved.");
+        }
 
         ReservedQuantity -= quantity;
     }

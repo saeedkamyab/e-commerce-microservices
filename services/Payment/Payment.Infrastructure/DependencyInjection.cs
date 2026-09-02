@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Payment.Application.Abstractions.Messaging;
+using Payment.Application.Abstractions.Payments;
 using Payment.Application.Abstractions.Persistence;
 using Payment.Infrastructure.Messaging;
 using Payment.Infrastructure.Persistence;
@@ -62,6 +63,16 @@ public static class DependencyInjection
 
         services.AddHostedService<
             OutboxBackgroundService>();
+
+        services.Configure<SimulatedPaymentGatewayOptions>(
+    configuration.GetSection("SimulatedPaymentGateway"));
+
+        services.AddScoped<
+            IPaymentGateway,
+            SimulatedPaymentGateway>();
+
+        services.AddHostedService<
+    PendingPaymentProcessor>();
 
         return services;
     }

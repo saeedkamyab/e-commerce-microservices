@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Payment.Application.Abstractions.Persistence;
+using Payment.Domain.Enums;
 
 namespace Payment.Infrastructure.Persistence.Repositories;
 
@@ -13,6 +14,18 @@ internal sealed class PaymentRepository
     {
         _dbContext = dbContext;
     }
+
+    public async Task<IReadOnlyCollection<Domain.Payments.Payment>> GetPendingAsync(
+    int batchSize,
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Payments
+            .Where(x => x.Status == PaymentStatus.Pending)
+            .OrderBy(x => x.CreatedOnUtc)
+            .Take(batchSize)
+            .ToListAsync(cancellationToken);
+    }
+
 
     public Task<Domain.Payments.Payment?> GetByIdAsync(
         Guid id,

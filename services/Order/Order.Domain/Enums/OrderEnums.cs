@@ -7,6 +7,7 @@
         InventoryReserved = 3,
         AwaitingPayment = 4,
         Paid = 5,
-        Cancelled = 6
+        PaymentFailed=6,
+        Cancelled = 7
     }
 }
