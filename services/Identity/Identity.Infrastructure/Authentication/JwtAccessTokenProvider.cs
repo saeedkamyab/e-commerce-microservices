@@ -25,15 +25,15 @@ internal sealed class JwtAccessTokenProvider
         var claims = new[]
         {
             new Claim(
-                JwtRegisteredClaimNames.Sub,
+                System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub,
                 user.Id.ToString()),
 
             new Claim(
-                JwtRegisteredClaimNames.Email,
+                System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Email,
                 user.Email.Value),
 
             new Claim(
-                JwtRegisteredClaimNames.Jti,
+                System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti,
                 Guid.NewGuid().ToString())
         };
 
