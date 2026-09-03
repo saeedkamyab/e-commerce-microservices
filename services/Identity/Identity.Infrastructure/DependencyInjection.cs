@@ -33,6 +33,13 @@ public static class DependencyInjection
             IPasswordHasher,
             PasswordHasher>();
 
+        services.Configure<JwtOptions>(
+    configuration.GetSection("Jwt"));
+
+        services.AddSingleton<
+            IAccessTokenProvider,
+            JwtAccessTokenProvider>();
+
         return services;
     }
 }

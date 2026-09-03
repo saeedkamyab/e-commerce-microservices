@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Identity.Application.Login;
 
-internal sealed class LoginUserCommandHandler
+public sealed class LoginUserCommandHandler
     : IRequestHandler<LoginUserCommand, AuthenticationResult>
 {
     private readonly IUserRepository _userRepository;

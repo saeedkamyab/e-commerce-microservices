@@ -4,5 +4,5 @@ namespace Identity.Application.Abstractions.Authentication;
 
 public interface IAccessTokenProvider
 {
-    string Create(User user);
+   public string Create(User user);
 }
