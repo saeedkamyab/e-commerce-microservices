@@ -5,10 +5,10 @@ namespace Identity.Application.Abstractions.Persistence;
 public interface IRefreshTokenRepository
 {
     Task AddAsync(
-        RefreshToken refreshToken,
+        Identity.Domain.Entities.RefreshToken refreshToken,
         CancellationToken cancellationToken = default);
 
-    Task<RefreshToken?> GetByTokenHashAsync(
+    Task<Identity.Domain.Entities.RefreshToken?> GetByTokenHashAsync(
         string tokenHash,
         CancellationToken cancellationToken = default);
 }

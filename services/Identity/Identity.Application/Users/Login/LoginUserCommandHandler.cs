@@ -68,7 +68,7 @@ public sealed class LoginUserCommandHandler
                 rawRefreshToken);
 
         var refreshToken =
-            RefreshToken.Create(
+            Identity.Domain.Entities.RefreshToken.Create(
                 user.Id,
                 refreshTokenHash,
                 DateTime.UtcNow.AddDays(
