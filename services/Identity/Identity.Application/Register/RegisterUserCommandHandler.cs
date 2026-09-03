@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Identity.Application.Register;
 
-internal sealed class RegisterUserCommandHandler
+public sealed class RegisterUserCommandHandler
     : IRequestHandler<RegisterUserCommand, Guid>
 {
     private readonly IUserRepository _userRepository;

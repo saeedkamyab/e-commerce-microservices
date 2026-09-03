@@ -7,10 +7,10 @@ namespace Identity.Infrastructure.Persistence.Repositories;
 internal sealed class UserRepository
     : IUserRepository
 {
-    private readonly IdentityDbContext _dbContext;
+    private readonly Infrastructure.Persistence.IdentityDbContext _dbContext;
 
     public UserRepository(
-        IdentityDbContext dbContext)
+        Infrastructure.Persistence.IdentityDbContext dbContext)
     {
         _dbContext = dbContext;
     }
