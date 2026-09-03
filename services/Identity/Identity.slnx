@@ -1,1 +1,14 @@
-<Solution />
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Identity.API/Identity.API.csproj" Id="4b006a56-beb2-4c02-a82f-6a674e9e54ec" />
+    <Project Path="Identity.Application/Identity.Application.csproj" Id="b0783bf5-306a-4906-8240-18147cc4fb7c" />
+    <Project Path="Identity.Contracts/Identity.Contracts.csproj" Id="da4e6307-9b0b-4e6e-8066-a4919bdffc7c" />
+    <Project Path="Identity.Domain/Identity.Domain.csproj" Id="974241f5-63d4-4c1d-b66e-4f7d2e1b89b4" />
+    <Project Path="Identity.Infrastructure/Identity.Infrastructure.csproj" Id="ea954efd-fd71-4311-afdb-199e5ea25bcb" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Identity.ArchitectureTests/Identity.ArchitectureTests.csproj" Id="322c6450-d1de-4752-9de7-f2a71dbb9555" />
+    <Project Path="tests/Identity.IntegrationTests/Identity.IntegrationTests.csproj" Id="6c66170d-5b6e-4a46-8ac3-9955f942ac84" />
+    <Project Path="tests/Identity.UnitTests/Identity.UnitTests.csproj" Id="cdd7c84a-c04d-4769-88e7-58b2f3660842" />
+  </Folder>
+</Solution>
