@@ -81,4 +81,73 @@ public sealed class RegisterUserTests
             string.IsNullOrWhiteSpace(
                 user.PasswordHash));
     }
+
+    [Fact]
+    public async Task Handle_When_Email_Already_Exists_Should_Throw()
+    {
+        // Arrange
+        await using var dbContext =
+            _fixture.CreateDbContext();
+
+        await dbContext.Users.ExecuteDeleteAsync();
+
+        var repository =
+            new UserRepository(dbContext);
+
+        IPasswordHasher passwordHasher =
+            new PasswordHasher();
+
+        var handler =
+            new RegisterUserCommandHandler(
+                repository,
+                dbContext,
+                passwordHasher);
+
+        var email =
+            $"duplicate-{Guid.NewGuid()}@example.com";
+
+        var firstCommand =
+            new RegisterUserCommand(
+                email,
+                "StrongPassword123!",
+                "Ali",
+                "Ahmadi");
+
+        var secondCommand =
+            new RegisterUserCommand(
+                email.ToUpperInvariant(),
+                "AnotherPassword123!",
+                "Reza",
+                "Karimi");
+
+        await handler.Handle(
+            firstCommand,
+            CancellationToken.None);
+
+        // Act
+        var act = async () =>
+            await handler.Handle(
+                secondCommand,
+                CancellationToken.None);
+
+        // Assert
+        var exception =
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                act);
+
+        Assert.Equal(
+            "A user with this email already exists.",
+            exception.Message);
+
+        await using var assertionContext =
+            _fixture.CreateDbContext();
+
+        var usersCount =
+            await assertionContext.Users
+                .CountAsync();
+
+        Assert.Equal(
+            1,
+            usersCount);
+    }
 }
