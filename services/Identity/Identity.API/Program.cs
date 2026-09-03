@@ -1,5 +1,7 @@
+using Identity.API.Authentication;
 using Identity.API.Endpoints;
 using Identity.Application;
+using Identity.Application.Abstractions.Authentication;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,6 +53,12 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<
+    ICurrentUser,
+    CurrentUser>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -61,7 +69,7 @@ app.UseAuthorization();
 
 app.MapRegisterUserEndpoint();
 app.MapLoginUserEndpoint();
-
+app.MapGetCurrentUserEndpoint();
 
 
 app.Run();

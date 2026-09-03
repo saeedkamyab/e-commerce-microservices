@@ -1,5 +1,5 @@
 ﻿using MediatR;
-namespace Identity.Application.Register;
+namespace Identity.Application.Users.Register;
 
 public sealed record RegisterUserCommand(
   string Email,

@@ -40,6 +40,18 @@ public static class DependencyInjection
             IAccessTokenProvider,
             JwtAccessTokenProvider>();
 
+        services.AddScoped<
+    IRefreshTokenRepository,
+    RefreshTokenRepository>();
+
+        services.AddSingleton<
+            IRefreshTokenProvider,
+            RefreshTokenProvider>();
+
+        services.Configure<RefreshTokenOptions>(
+            configuration.GetSection("RefreshToken"));
+
+
         return services;
     }
 }

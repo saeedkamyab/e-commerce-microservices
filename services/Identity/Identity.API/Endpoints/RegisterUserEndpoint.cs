@@ -1,4 +1,4 @@
-﻿using Identity.Application.Register;
+﻿using Identity.Application.Users.Register;
 using MediatR;
 
 namespace Identity.API.Endpoints

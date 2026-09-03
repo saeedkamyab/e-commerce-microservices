@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Identity.Application.Login;
+namespace Identity.Application.Users.Login;
 
 
 public sealed record LoginUserCommand(

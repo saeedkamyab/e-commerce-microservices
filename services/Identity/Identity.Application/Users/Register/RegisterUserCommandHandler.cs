@@ -4,7 +4,7 @@ using Identity.Domain.Entities;
 using Identity.Domain.ValueObjects;
 using MediatR;
 
-namespace Identity.Application.Register;
+namespace Identity.Application.Users.Register;
 
 public sealed class RegisterUserCommandHandler
     : IRequestHandler<RegisterUserCommand, Guid>

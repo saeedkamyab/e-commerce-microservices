@@ -1,4 +1,4 @@
-﻿using Identity.Application.Login;
+﻿using Identity.Application.Users.Login;
 using MediatR;
 
 namespace Identity.API.Endpoints
@@ -26,11 +26,12 @@ namespace Identity.API.Endpoints
                             cancellationToken);
 
                     return Results.Ok(
-                        new
-                        {
-                            result.UserId,
-                            result.AccessToken
-                        });
+     new
+     {
+         result.UserId,
+         result.AccessToken,
+         result.RefreshToken
+     });
                 });
         }
     }

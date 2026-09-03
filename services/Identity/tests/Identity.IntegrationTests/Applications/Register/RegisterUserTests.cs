@@ -1,5 +1,5 @@
 ﻿using Identity.Application.Abstractions.Authentication;
-using Identity.Application.Register;
+using Identity.Application.Users.Register;
 using Identity.Infrastructure.Authentication;
 using Identity.Infrastructure.Persistence.Repositories;
 using Identity.IntegrationTests.Infrastructure;
