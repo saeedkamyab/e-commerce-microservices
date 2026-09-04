@@ -517,4 +517,113 @@ public sealed class RefreshTokenTests
             act);
     }
 
+
+    [Fact]
+    public async Task Handle_When_RefreshToken_Is_Updated_Concurrently_Should_Reject_Request()
+    {
+        // Arrange
+        await using var setupContext =
+            _fixture.CreateDbContext();
+
+        await setupContext.RefreshTokens.ExecuteDeleteAsync();
+        await setupContext.Users.ExecuteDeleteAsync();
+
+        IRefreshTokenProvider refreshTokenProvider =
+            new RefreshTokenProvider();
+
+        var user =
+            User.Create(
+                Email.Create("refresh-race@example.com"),
+                "hashed-password",
+                "Ali",
+                "Ahmadi");
+
+        setupContext.Users.Add(user);
+
+        var rawToken =
+            refreshTokenProvider.Generate();
+
+        var refreshToken =
+            Identity.Domain.Entities.RefreshToken.Create(
+                user.Id,
+                refreshTokenProvider.Hash(rawToken),
+                DateTime.UtcNow.AddDays(7));
+
+        setupContext.RefreshTokens.Add(refreshToken);
+
+        await setupContext.SaveChangesAsync();
+
+        await using var context1 =
+            _fixture.CreateDbContext();
+
+        await using var context2 =
+            _fixture.CreateDbContext();
+
+        var userRepository1 =
+            new UserRepository(context1);
+
+        var refreshTokenRepository1 =
+            new RefreshTokenRepository(context1);
+
+        var userRepository2 =
+            new UserRepository(context2);
+
+        var refreshTokenRepository2 =
+            new RefreshTokenRepository(context2);
+
+        var handler1 =
+            new RefreshTokenCommandHandler(
+                userRepository1,
+                refreshTokenRepository1,
+                refreshTokenProvider,
+                new FakeAccessTokenProvider(),
+                context1,
+                Options.Create(
+                    new RefreshTokenOptions
+                    {
+                        ExpirationDays = 7
+                    }));
+
+        var handler2 =
+            new RefreshTokenCommandHandler(
+                userRepository2,
+                refreshTokenRepository2,
+                refreshTokenProvider,
+                new FakeAccessTokenProvider(),
+                context2,
+                Options.Create(
+                    new RefreshTokenOptions
+                    {
+                        ExpirationDays = 7
+                    }));
+
+        // Both contexts must load the same old version first
+        await refreshTokenRepository1.GetByTokenHashAsync(
+            refreshTokenProvider.Hash(rawToken),
+            CancellationToken.None);
+
+        await refreshTokenRepository2.GetByTokenHashAsync(
+            refreshTokenProvider.Hash(rawToken),
+            CancellationToken.None);
+
+        // First request wins
+        await handler1.Handle(
+            new RefreshTokenCommand(rawToken),
+            CancellationToken.None);
+
+        // Act
+        var act = () =>
+            handler2.Handle(
+                new RefreshTokenCommand(rawToken),
+                CancellationToken.None);
+
+        // Assert
+        var exception =
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                act);
+
+        Assert.Equal(
+            "Invalid refresh token.",
+            exception.Message);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Abstractions.Authentication;
 using Identity.Application.Abstractions.Persistence;
+using Identity.Application.Common.Exceptions;
 using Identity.Application.Users.Login;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -48,7 +49,7 @@ internal sealed class RefreshTokenCommandHandler
                     tokenHash,
                     cancellationToken);
 
-        if (currentRefreshToken is null )
+        if (currentRefreshToken is null)
         {
             throw new InvalidOperationException(
                 "Invalid refresh token.");
@@ -114,8 +115,16 @@ internal sealed class RefreshTokenCommandHandler
         var accessToken =
             _accessTokenProvider.Create(user);
 
-        await _unitOfWork.SaveChangesAsync(
-            cancellationToken);
+        try
+        {
+            await _unitOfWork.SaveChangesAsync(
+                cancellationToken);
+        }
+        catch (ConcurrencyException)
+        {
+            throw new InvalidOperationException(
+                "Invalid refresh token.");
+        }
 
         return new AuthenticationResult(
             user.Id,
