@@ -448,4 +448,73 @@ public sealed class RefreshTokenTests
                 Assert.NotNull(token.RevokedOnUtc));
     }
 
+
+    [Fact]
+    public async Task Concurrent_Update_Of_Same_RefreshToken_Should_Fail()
+    {
+        // Arrange
+        await using var setupContext =
+            _fixture.CreateDbContext();
+
+        await setupContext.RefreshTokens.ExecuteDeleteAsync();
+        await setupContext.Users.ExecuteDeleteAsync();
+
+        var user =
+            User.Create(
+                Email.Create("concurrency@example.com"),
+                "hashed-password",
+                "Ali",
+                "Ahmadi");
+
+        setupContext.Users.Add(user);
+
+        IRefreshTokenProvider refreshTokenProvider =
+            new RefreshTokenProvider();
+
+        var rawToken =
+            refreshTokenProvider.Generate();
+
+        var refreshToken =
+            Identity.Domain.Entities.RefreshToken.Create(
+                user.Id,
+                refreshTokenProvider.Hash(rawToken),
+                DateTime.UtcNow.AddDays(7));
+
+        setupContext.RefreshTokens.Add(refreshToken);
+
+        await setupContext.SaveChangesAsync();
+
+        // Two independent requests / DbContexts
+        await using var context1 =
+            _fixture.CreateDbContext();
+
+        await using var context2 =
+            _fixture.CreateDbContext();
+
+        var token1 =
+            await context1.RefreshTokens
+                .SingleAsync(x =>
+                    x.Id == refreshToken.Id);
+
+        var token2 =
+            await context2.RefreshTokens
+                .SingleAsync(x =>
+                    x.Id == refreshToken.Id);
+
+        token1.ReplaceWith(Guid.NewGuid());
+
+        token2.ReplaceWith(Guid.NewGuid());
+
+     
+        await context1.SaveChangesAsync();
+
+        // Act
+        var act = () =>
+            context2.SaveChangesAsync();
+
+        // Assert
+        await Assert.ThrowsAsync<DbUpdateConcurrencyException>(
+            act);
+    }
+
 }
