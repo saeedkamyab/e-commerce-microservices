@@ -69,6 +69,7 @@ app.UseAuthorization();
 
 app.MapRegisterUserEndpoint();
 app.MapLoginUserEndpoint();
+app.MapLogoutUserEndpoint();
 app.MapGetCurrentUserEndpoint();
 app.MapRefreshTokenEndpoint();
 
