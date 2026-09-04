@@ -48,12 +48,39 @@ internal sealed class RefreshTokenCommandHandler
                     tokenHash,
                     cancellationToken);
 
-        if (currentRefreshToken is null ||
-            !currentRefreshToken.IsActive)
+        if (currentRefreshToken is null )
         {
             throw new InvalidOperationException(
                 "Invalid refresh token.");
         }
+        if (currentRefreshToken.IsExpired)
+        {
+            throw new InvalidOperationException(
+                "Invalid refresh token.");
+        }
+
+        if (currentRefreshToken.IsRevoked)
+        {
+            var familyTokens =
+                await _refreshTokenRepository.GetByFamilyIdAsync(
+                    currentRefreshToken.FamilyId,
+                    cancellationToken);
+
+            foreach (var token in familyTokens)
+            {
+                if (!token.IsRevoked)
+                {
+                    token.Revoke();
+                }
+            }
+
+            await _unitOfWork.SaveChangesAsync(
+                cancellationToken);
+
+            throw new InvalidOperationException(
+                "Invalid refresh token.");
+        }
+
 
         var user =
             await _userRepository.GetByIdAsync(
@@ -61,9 +88,6 @@ internal sealed class RefreshTokenCommandHandler
                 cancellationToken)
             ?? throw new InvalidOperationException(
                 "Invalid refresh token.");
-
-        
-        currentRefreshToken.Revoke();
 
         var newRawRefreshToken =
             _refreshTokenProvider.Generate();
@@ -73,11 +97,15 @@ internal sealed class RefreshTokenCommandHandler
                 newRawRefreshToken);
 
         var newRefreshToken =
-           Identity.Domain.Entities.RefreshToken.Create(
-                user.Id,
-                newRefreshTokenHash,
-                DateTime.UtcNow.AddDays(
-                    _options.ExpirationDays));
+     Domain.Entities.RefreshToken.Create(
+         user.Id,
+         currentRefreshToken.FamilyId,
+         newRefreshTokenHash,
+         DateTime.UtcNow.AddDays(
+             _options.ExpirationDays));
+
+        currentRefreshToken.ReplaceWith(
+    newRefreshToken.Id);
 
         await _refreshTokenRepository.AddAsync(
             newRefreshToken,

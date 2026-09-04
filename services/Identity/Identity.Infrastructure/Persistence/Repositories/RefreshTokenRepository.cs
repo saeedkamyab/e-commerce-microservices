@@ -33,4 +33,13 @@ internal sealed class RefreshTokenRepository
                 x => x.TokenHash == tokenHash,
                 cancellationToken);
     }
+
+    public async Task<IReadOnlyCollection<RefreshToken>> GetByFamilyIdAsync(
+    Guid familyId,
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.RefreshTokens
+            .Where(x => x.FamilyId == familyId)
+            .ToListAsync(cancellationToken);
+    }
 }

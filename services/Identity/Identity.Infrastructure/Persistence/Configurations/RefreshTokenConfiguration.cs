@@ -40,7 +40,17 @@ internal sealed class RefreshTokenConfiguration
         builder.HasIndex(x => x.TokenHash)
             .IsUnique();
 
+
+        builder.Property(x => x.FamilyId)
+    .HasColumnName("family_id")
+    .IsRequired();
+
+        builder.Property(x => x.ReplacedByTokenId)
+            .HasColumnName("replaced_by_token_id");
+
         builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.FamilyId);
+
 
         builder.Ignore(x => x.IsRevoked);
         builder.Ignore(x => x.IsExpired);

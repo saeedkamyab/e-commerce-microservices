@@ -11,4 +11,8 @@ public interface IRefreshTokenRepository
     Task<Identity.Domain.Entities.RefreshToken?> GetByTokenHashAsync(
         string tokenHash,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<Domain.Entities.RefreshToken>> GetByFamilyIdAsync(
+    Guid familyId,
+    CancellationToken cancellationToken = default);
 }
