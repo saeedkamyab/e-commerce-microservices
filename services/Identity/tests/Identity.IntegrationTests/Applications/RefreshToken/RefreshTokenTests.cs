@@ -42,7 +42,7 @@ public sealed class RefreshTokenTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("refresh@example.com"),
                 "hashed-password",
                 "Ali",
@@ -174,7 +174,7 @@ public sealed class RefreshTokenTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("revoked@example.com"),
                 "hashed-password",
                 "Ali",
@@ -257,7 +257,7 @@ public sealed class RefreshTokenTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("reuse@example.com"),
                 "hashed-password",
                 "Ali",
@@ -366,7 +366,7 @@ public sealed class RefreshTokenTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("compromised@example.com"),
                 "hashed-password",
                 "Ali",
@@ -461,7 +461,7 @@ public sealed class RefreshTokenTests
         await setupContext.Users.ExecuteDeleteAsync();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("concurrency@example.com"),
                 "hashed-password",
                 "Ali",
@@ -533,7 +533,7 @@ public sealed class RefreshTokenTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("refresh-race@example.com"),
                 "hashed-password",
                 "Ali",

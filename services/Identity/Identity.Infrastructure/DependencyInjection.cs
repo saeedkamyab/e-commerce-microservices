@@ -52,6 +52,19 @@ public static class DependencyInjection
             configuration.GetSection("RefreshToken"));
 
 
+        services.Configure<GoogleAuthOptions>(
+    configuration.GetSection(
+        GoogleAuthOptions.SectionName));
+
+        services.AddScoped<
+            IExternalIdentityProvider,
+            GoogleExternalIdentityProvider>();
+
+        services.AddScoped<
+    IExternalIdentityRepository,
+    ExternalIdentityRepository>();
+
+
         return services;
     }
 }

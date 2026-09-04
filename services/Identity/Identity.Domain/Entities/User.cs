@@ -9,7 +9,7 @@ public sealed class User
 
     public Email Email { get; private set; } = null!;
 
-    public string PasswordHash { get; private set; } = null!;
+    public string? PasswordHash { get; private set; }
 
     public string FirstName { get; private set; } = null!;
 
@@ -24,24 +24,70 @@ public sealed class User
     private User(
         Guid id,
         Email email,
-        string passwordHash,
+        string? passwordHash,
         string firstName,
         string lastName,
         DateTime createdOnUtc)
     {
+
         Id = id;
         Email = email;
         PasswordHash = passwordHash;
-        FirstName = firstName;
-        LastName = lastName;
+        FirstName = firstName.Trim();
+        LastName = lastName.Trim();
         CreatedOnUtc = createdOnUtc;
     }
 
-   
 
-    public static User Create(
+
+    public static User CreateLocal(
+       Email email,
+       string passwordHash,
+       string firstName,
+       string lastName)
+    {
+        ValidateCommonFields(
+            email,
+            firstName,
+            lastName);
+
+        if (string.IsNullOrWhiteSpace(passwordHash))
+        {
+            throw new ArgumentException(
+                "Password hash cannot be empty.",
+                nameof(passwordHash));
+        }
+
+        return new User(
+            Guid.NewGuid(),
+            email,
+            passwordHash,
+            firstName,
+            lastName,
+            DateTime.UtcNow);
+    }
+
+    public static User CreateExternal(
         Email email,
-        string passwordHash,
+        string firstName,
+        string lastName)
+    {
+        ValidateCommonFields(
+            email,
+            firstName,
+            lastName);
+
+        return new User(
+            Guid.NewGuid(),
+            email,
+            null,
+            firstName,
+            lastName,
+            DateTime.UtcNow);
+    }
+
+    private static void ValidateCommonFields(
+        Email email,
         string firstName,
         string lastName)
     {
@@ -49,13 +95,6 @@ public sealed class User
         {
             throw new ArgumentNullException(
                 nameof(email));
-        }
-
-        if (string.IsNullOrWhiteSpace(passwordHash))
-        {
-            throw new ArgumentException(
-                "Password hash cannot be empty.",
-                nameof(passwordHash));
         }
 
         if (string.IsNullOrWhiteSpace(firstName))
@@ -71,13 +110,6 @@ public sealed class User
                 "Last name cannot be empty.",
                 nameof(lastName));
         }
-
-        return new User(
-            Guid.NewGuid(),
-            email,
-            passwordHash,
-            firstName.Trim(),
-            lastName.Trim(),
-            DateTime.UtcNow);
     }
+
 }

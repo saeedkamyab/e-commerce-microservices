@@ -50,12 +50,13 @@ public sealed class LoginUserCommandHandler
                 cancellationToken);
 
         if (user is null ||
-            !_passwordHasher.Verify(
-                request.Password,
-                user.PasswordHash))
+          string.IsNullOrWhiteSpace(user.PasswordHash) ||
+          !_passwordHasher.Verify(
+              request.Password,
+              user.PasswordHash))
         {
             throw new UnauthorizedException(
-      "Invalid email or password.");
+                "Invalid email or password.");
         }
 
         var accessToken =

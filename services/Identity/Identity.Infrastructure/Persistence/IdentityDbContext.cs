@@ -19,7 +19,8 @@ public  class IdentityDbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens =>
     Set<RefreshToken>();
-
+    public DbSet<ExternalIdentity> ExternalIdentities =>
+    Set<ExternalIdentity>();
 
     public async Task<int> SaveChangesAsync(
     CancellationToken cancellationToken = default)

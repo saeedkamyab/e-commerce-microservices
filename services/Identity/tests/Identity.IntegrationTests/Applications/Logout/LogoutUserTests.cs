@@ -33,7 +33,7 @@ public class LogoutUserTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("logout@example.com"),
                 "hashed-password",
                 "Ali",

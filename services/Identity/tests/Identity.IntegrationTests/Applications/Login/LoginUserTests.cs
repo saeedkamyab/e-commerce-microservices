@@ -49,7 +49,7 @@ public class LoginUserTests
             "StrongPassword123!";
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("login@example.com"),
                 passwordHasher.Hash(password),
                 "Ali",
@@ -152,7 +152,7 @@ public class LoginUserTests
             new RefreshTokenProvider();
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("login@example.com"),
                 passwordHasher.Hash("CorrectPassword123!"),
                 "Ali",

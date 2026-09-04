@@ -45,7 +45,7 @@ public sealed class RegisterUserCommandHandler
             _passwordHasher.Hash(request.Password);
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 email,
                 passwordHash,
                 request.FirstName,

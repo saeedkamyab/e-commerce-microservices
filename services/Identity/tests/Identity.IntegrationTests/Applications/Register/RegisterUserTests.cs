@@ -164,7 +164,7 @@ public sealed class RegisterUserTests
         await dbContext1.Users.ExecuteDeleteAsync();
 
         var user1 =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("duplicate@example.com"),
                 "hashed-password-1",
                 "Ali",
@@ -178,7 +178,7 @@ public sealed class RegisterUserTests
             _fixture.CreateDbContext();
 
         var user2 =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("DUPLICATE@EXAMPLE.COM"),
                 "hashed-password-2",
                 "Reza",

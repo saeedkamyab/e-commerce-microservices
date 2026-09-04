@@ -14,7 +14,7 @@ public sealed class UserTests
 
         // Act
         var user =
-            User.Create(
+            User.CreateLocal(
                 email,
                 "hashed-password",
                 "Ali",
@@ -51,7 +51,7 @@ public sealed class UserTests
 
         // Act
         var user =
-            User.Create(
+            User.CreateLocal(
                 email,
                 "hashed-password",
                 "  Ali  ",
@@ -76,7 +76,7 @@ public sealed class UserTests
 
         // Act
         var act = () =>
-            User.Create(
+            User.CreateLocal(
                 email,
                 "",
                 "Ali",
@@ -94,7 +94,7 @@ public sealed class UserTests
             Email.Create("test@example.com");
 
         var act = () =>
-            User.Create(
+            User.CreateLocal(
                 email,
                 "hashed-password",
                 "",
@@ -111,7 +111,7 @@ public sealed class UserTests
             Email.Create("test@example.com");
 
         var act = () =>
-            User.Create(
+            User.CreateLocal(
                 email,
                 "hashed-password",
                 "Ali",

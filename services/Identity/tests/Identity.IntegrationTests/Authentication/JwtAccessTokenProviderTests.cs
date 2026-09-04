@@ -28,7 +28,7 @@ public sealed class JwtAccessTokenProviderTests
             new JwtAccessTokenProvider(options);
 
         var user =
-            User.Create(
+            User.CreateLocal(
                 Email.Create("jwt@example.com"),
                 "hashed-password",
                 "Ali",

@@ -31,9 +31,10 @@ internal sealed class UserConfiguration
             });
 
         builder.Property(x => x.PasswordHash)
-            .HasColumnName("password_hash")
-            .HasMaxLength(500)
-            .IsRequired();
+    .HasColumnName("password_hash")
+    .HasMaxLength(500)
+    .IsRequired(false);
+
 
         builder.Property(x => x.FirstName)
             .HasColumnName("first_name")
