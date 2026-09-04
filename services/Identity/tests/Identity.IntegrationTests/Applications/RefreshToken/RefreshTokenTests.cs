@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Abstractions.Authentication;
+using Identity.Application.Common.Exceptions;
 using Identity.Application.RefreshToken;
 using Identity.Domain.Entities;
 using Identity.Domain.ValueObjects;
@@ -221,7 +222,7 @@ public sealed class RefreshTokenTests
 
         // Assert
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         Assert.Equal(
@@ -311,7 +312,7 @@ public sealed class RefreshTokenTests
                 CancellationToken.None);
 
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         // Assert
@@ -412,7 +413,7 @@ public sealed class RefreshTokenTests
         var rawTokenB =
             firstResult.RefreshToken;
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
+        await Assert.ThrowsAsync<UnauthorizedException>(
             () => handler.Handle(
                 new RefreshTokenCommand(rawTokenA),
                 CancellationToken.None));
@@ -425,7 +426,7 @@ public sealed class RefreshTokenTests
 
        
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         Assert.Equal(
@@ -513,7 +514,7 @@ public sealed class RefreshTokenTests
             context2.SaveChangesAsync();
 
         // Assert
-        await Assert.ThrowsAsync<DbUpdateConcurrencyException>(
+        await Assert.ThrowsAsync<ConcurrencyException>(
             act);
     }
 
@@ -619,7 +620,7 @@ public sealed class RefreshTokenTests
 
         // Assert
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         Assert.Equal(

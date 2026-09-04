@@ -51,13 +51,13 @@ internal sealed class RefreshTokenCommandHandler
 
         if (currentRefreshToken is null)
         {
-            throw new InvalidOperationException(
-                "Invalid refresh token.");
+            throw new UnauthorizedException(
+       "Invalid refresh token.");
         }
         if (currentRefreshToken.IsExpired)
         {
-            throw new InvalidOperationException(
-                "Invalid refresh token.");
+            throw new UnauthorizedException(
+       "Invalid refresh token.");
         }
 
         if (currentRefreshToken.IsRevoked)
@@ -78,7 +78,7 @@ internal sealed class RefreshTokenCommandHandler
             await _unitOfWork.SaveChangesAsync(
                 cancellationToken);
 
-            throw new InvalidOperationException(
+            throw new UnauthorizedException(
                 "Invalid refresh token.");
         }
 
@@ -87,7 +87,7 @@ internal sealed class RefreshTokenCommandHandler
             await _userRepository.GetByIdAsync(
                 currentRefreshToken.UserId,
                 cancellationToken)
-            ?? throw new InvalidOperationException(
+            ?? throw new UnauthorizedException(
                 "Invalid refresh token.");
 
         var newRawRefreshToken =
@@ -122,8 +122,8 @@ internal sealed class RefreshTokenCommandHandler
         }
         catch (ConcurrencyException)
         {
-            throw new InvalidOperationException(
-                "Invalid refresh token.");
+            throw new UnauthorizedException(
+           "Invalid refresh token.");
         }
 
         return new AuthenticationResult(

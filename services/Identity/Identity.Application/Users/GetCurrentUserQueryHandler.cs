@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Abstractions.Authentication;
 using Identity.Application.Abstractions.Persistence;
+using Identity.Application.Common.Exceptions;
 using MediatR;
 
 namespace Identity.Application.Users;
@@ -28,7 +29,7 @@ internal sealed class GetCurrentUserQueryHandler
             await _userRepository.GetByIdAsync(
                 _currentUser.UserId,
                 cancellationToken)
-            ?? throw new InvalidOperationException(
+            ?? throw new UnauthorizedException(
                 "Current user was not found.");
 
         return new GetCurrentUserResponse(

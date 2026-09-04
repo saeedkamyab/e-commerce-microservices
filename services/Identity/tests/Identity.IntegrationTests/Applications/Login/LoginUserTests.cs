@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Abstractions.Authentication;
 using Identity.Application.Abstractions.Persistence;
+using Identity.Application.Common.Exceptions;
 using Identity.Application.Users.Login;
 using Identity.Domain.Entities;
 using Identity.Domain.ValueObjects;
@@ -194,7 +195,7 @@ public class LoginUserTests
 
         // Assert
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         Assert.Equal(
@@ -255,7 +256,7 @@ public class LoginUserTests
                 CancellationToken.None);
 
         var exception =
-            await Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<UnauthorizedException>(
                 act);
 
         Assert.Equal(

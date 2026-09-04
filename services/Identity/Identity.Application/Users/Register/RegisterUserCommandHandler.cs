@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Abstractions.Authentication;
 using Identity.Application.Abstractions.Persistence;
+using Identity.Application.Common.Exceptions;
 using Identity.Domain.Entities;
 using Identity.Domain.ValueObjects;
 using MediatR;
@@ -36,8 +37,8 @@ public sealed class RegisterUserCommandHandler
 
         if (exists)
         {
-            throw new InvalidOperationException(
-                "A user with this email already exists.");
+            throw new ConflictException(
+        "A user with this email already exists.");
         }
 
         var passwordHash =

@@ -2,6 +2,7 @@
 using Identity.Application.Common.Exceptions;
 using Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Data;
 
 namespace Identity.Infrastructure.Persistence;
@@ -28,13 +29,27 @@ public  class IdentityDbContext
             return await base.SaveChangesAsync(
                 cancellationToken);
         }
-        catch (DbUpdateConcurrencyException ex)
+        catch (DbUpdateConcurrencyException)
         {
             throw new ConcurrencyException(
                 "A concurrency conflict occurred.");
         }
+        catch (DbUpdateException ex)
+            when (IsEmailUniqueViolation(ex))
+        {
+            throw new ConflictException(
+                "A user with this email already exists.");
+        }
     }
-
+    private static bool IsEmailUniqueViolation(
+    DbUpdateException exception)
+    {
+        return exception.InnerException is PostgresException
+        {
+            SqlState: PostgresErrorCodes.UniqueViolation,
+            ConstraintName: "ux_users_email"
+        };
+    }
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {

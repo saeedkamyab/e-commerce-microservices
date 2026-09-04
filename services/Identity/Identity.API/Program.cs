@@ -1,5 +1,6 @@
 using Identity.API.Authentication;
 using Identity.API.Endpoints;
+using Identity.API.ExceptionHandling;
 using Identity.Application;
 using Identity.Application.Abstractions.Authentication;
 using Identity.Infrastructure;
@@ -58,6 +59,9 @@ builder.Services.AddScoped<
     ICurrentUser,
     CurrentUser>();
 
+builder.Services.AddExceptionHandler<
+    GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -66,6 +70,8 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
+
 
 app.MapRegisterUserEndpoint();
 app.MapLoginUserEndpoint();

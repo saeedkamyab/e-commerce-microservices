@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Abstractions.Authentication;
 using Identity.Application.Abstractions.Persistence;
+using Identity.Application.Common.Exceptions;
 using Identity.Domain.Entities;
 using Identity.Domain.ValueObjects;
 using MediatR;
@@ -53,8 +54,8 @@ public sealed class LoginUserCommandHandler
                 request.Password,
                 user.PasswordHash))
         {
-            throw new InvalidOperationException(
-                "Invalid email or password.");
+            throw new UnauthorizedException(
+      "Invalid email or password.");
         }
 
         var accessToken =

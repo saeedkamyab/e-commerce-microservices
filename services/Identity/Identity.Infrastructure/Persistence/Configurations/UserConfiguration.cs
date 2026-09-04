@@ -27,7 +27,7 @@ internal sealed class UserConfiguration
                     .IsRequired();
 
                 email.HasIndex(x => x.Value)
-                    .IsUnique();
+                    .IsUnique().HasDatabaseName("ux_users_email");
             });
 
         builder.Property(x => x.PasswordHash)
