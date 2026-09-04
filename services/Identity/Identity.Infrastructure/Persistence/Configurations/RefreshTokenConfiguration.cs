@@ -50,7 +50,9 @@ internal sealed class RefreshTokenConfiguration
 
         builder.HasIndex(x => x.UserId);
         builder.HasIndex(x => x.FamilyId);
-
+        
+        builder.Property<uint>("xmin")
+    .IsRowVersion();
 
         builder.Ignore(x => x.IsRevoked);
         builder.Ignore(x => x.IsExpired);
