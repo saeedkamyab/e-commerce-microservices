@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Order.Application.Abstractions.Catalog;
 using Order.Application.Abstractions.Messaging;
 using Order.Application.Abstractions.Persistence;
+using Order.Infrastructure.Catalog;
 using Order.Infrastructure.Messaging;
 using Order.Infrastructure.Messaging.Inventory;
 using Order.Infrastructure.Messaging.Payment;
@@ -82,6 +84,23 @@ public static class DependencyInjection
         services.AddScoped<
     IIntegrationEventHandler,
     InventoryReleasedIntegrationEventHandler>();
+
+
+
+        services.AddHttpClient<ICatalogService, CatalogService>(
+    (serviceProvider, httpClient) =>
+    {
+        var configuration =
+            serviceProvider.GetRequiredService<IConfiguration>();
+
+        var baseAddress =
+            configuration["Services:Catalog:BaseAddress"]
+            ?? throw new InvalidOperationException(
+                "Catalog service base address is not configured.");
+
+        httpClient.BaseAddress =
+            new Uri(baseAddress);
+    });
 
         return services;
     }

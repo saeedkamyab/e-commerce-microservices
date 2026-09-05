@@ -8,5 +8,4 @@ public sealed record CreateOrderCommand(
 
 public sealed record CreateOrderItemInput(
     Guid ProductId,
-    int Quantity,
-    decimal UnitPrice);
+    int Quantity);

@@ -20,8 +20,7 @@ public static class CreateOrderEndpoint
                         .Select(x =>
                             new CreateOrderItemInput(
                                 x.ProductId,
-                                x.Quantity,
-                                x.UnitPrice))
+                                x.Quantity))
                         .ToArray());
 
                 var orderId = await sender.Send(
@@ -43,5 +42,4 @@ public sealed record CreateOrderRequest(
 
 public sealed record CreateOrderItemRequest(
     Guid ProductId,
-    int Quantity,
-    decimal UnitPrice);
+    int Quantity);
