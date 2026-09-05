@@ -22,7 +22,7 @@ public static class GetOrderByIdEndpoint
                 return result is null
                     ? Results.NotFound()
                     : Results.Ok(result);
-            });
+            }).RequireAuthorization();
 
         return endpoints;
     }

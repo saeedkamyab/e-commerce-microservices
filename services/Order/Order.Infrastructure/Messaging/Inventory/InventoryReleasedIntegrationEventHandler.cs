@@ -37,6 +37,7 @@ internal class InventoryReleasedIntegrationEventHandler
         var order =
             await _repository.GetByIdAsync(
                 integrationEvent.OrderId,
+
                 cancellationToken)
             ?? throw new InvalidOperationException(
                 $"Order '{integrationEvent.OrderId}' was not found.");

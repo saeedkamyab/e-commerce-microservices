@@ -16,7 +16,6 @@ public static class CreateOrderEndpoint
                 CancellationToken cancellationToken) =>
             {
                 var command = new CreateOrderCommand(
-                    request.UserId,
                     request.Items
                         .Select(x =>
                             new CreateOrderItemInput(
@@ -31,8 +30,8 @@ public static class CreateOrderEndpoint
 
                 return Results.Created(
                     $"/api/orders/{orderId}",
-                    new { Id = orderId });
-            });
+                    new { Id = orderId }) ;
+            }).RequireAuthorization(); 
 
         return endpoints;
     }

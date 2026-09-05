@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Order.Application.Abstractions.Authentication;
 using Order.Application.Abstractions.Persistence;
 using Order.Domain.Entities;
 
@@ -9,13 +10,15 @@ public sealed class CreateOrderCommandHandler
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUser _currentUser;
 
     public CreateOrderCommandHandler(
         IOrderRepository orderRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,ICurrentUser currentUser)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
+        _currentUser = currentUser;
     }
 
     public async Task<Guid> Handle(
@@ -31,7 +34,7 @@ public sealed class CreateOrderCommandHandler
             .ToArray();
 
         var order = Domain.Entities.Order.Create(
-            request.UserId,
+            _currentUser.UserId,
             items);
         order.StartInventoryReservation();
 

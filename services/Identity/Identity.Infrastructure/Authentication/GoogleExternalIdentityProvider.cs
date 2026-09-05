@@ -41,6 +41,12 @@ internal class GoogleExternalIdentityProvider : IExternalIdentityProvider
                     "Google account does not contain an email.");
             }
 
+            if (payload.EmailVerified != true)
+            {
+                throw new UnauthorizedException(
+                    "Google email is not verified.");
+            }
+
             var firstName =
     !string.IsNullOrWhiteSpace(payload.GivenName)
         ? payload.GivenName

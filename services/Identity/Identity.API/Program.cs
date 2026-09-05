@@ -75,7 +75,7 @@ app.UseExceptionHandler();
 
 app.MapRegisterUserEndpoint();
 app.MapLoginUserEndpoint();
-app.MapGoogleLoginEndpoint();
+app.MapGoogleLogin();
 app.MapLogoutUserEndpoint();
 app.MapGetCurrentUserEndpoint();
 app.MapRefreshTokenEndpoint();

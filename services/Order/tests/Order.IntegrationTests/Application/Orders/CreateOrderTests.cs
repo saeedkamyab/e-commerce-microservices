@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Order.Application.Abstractions.Authentication;
 using Order.Application.Abstractions.Persistence;
 using Order.Application.Orders.Commands.CreateOrder;
 using Order.Contracts.IntegrationEvents;
@@ -32,10 +33,17 @@ public sealed class CreateOrderTests
 
         IUnitOfWork unitOfWork = dbContext;
 
+        var currentUserId =
+    Guid.NewGuid();
+
+        var currentUser =
+            new FakeCurrentUser(
+                currentUserId);
+
         var handler =
             new CreateOrderCommandHandler(
                 repository,
-                unitOfWork);
+                unitOfWork, currentUser);
 
         var userId = Guid.NewGuid();
 
@@ -44,7 +52,7 @@ public sealed class CreateOrderTests
 
         var command =
             new CreateOrderCommand(
-                userId,
+              
                 [
                     new CreateOrderItemInput(
                         product1Id,

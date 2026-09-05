@@ -6,6 +6,11 @@ public interface IOrderRepository
         Guid id,
         CancellationToken cancellationToken);
 
+    Task<Order.Domain.Entities.Order?> GetByIdForUserAsync(
+    Guid id,
+    Guid userId,
+    CancellationToken cancellationToken);
+
     Task AddAsync(
         Domain.Entities.Order order,
         CancellationToken cancellationToken);
